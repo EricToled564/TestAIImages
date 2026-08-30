@@ -261,6 +261,8 @@ var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')
 var CONTRIB_KEY='aia_contrib_'+AGG_NS;
 var lastScore=null;
 
+/* El almacén exige claves de 3 a 64 caracteres: b00..b10, nunca b0. */
+function bucketKey(i){return 'b'+(i<10?'0'+i:i);}
 function bucketOf(s){return Math.min(10,Math.floor(s/10));}
 function bucketLabel(i){return i===10?'100':(i*10)+'–'+(i*10+9);}
 function bucketMid(i){return i===10?100:i*10+4.5;}
@@ -287,12 +289,12 @@ function loadGlobal(score){
   var tasks=[];
   for(var i=0;i<=10;i++){
     if(i===my && counting){
-      tasks.push(hitCount('b'+i).then(function(v){
+      tasks.push(hitCount(bucketKey(i)).then(function(v){
         try{localStorage.setItem(CONTRIB_KEY,'1');}catch(e){}
         return v;
       }));
     } else {
-      tasks.push(getCount('b'+i));
+      tasks.push(getCount(bucketKey(i)));
     }
   }
   Promise.all(tasks).then(function(counts){
