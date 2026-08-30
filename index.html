@@ -22,7 +22,9 @@
 *{box-sizing:border-box}html,body{margin:0;padding:0;height:100%}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.5}
 .screen{display:none!important}.screen.on{display:block!important}
-.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+/* min-width:0 evita que el contenido intrínseco (la tira de imágenes) estire
+   el contenedor por encima del ancho de la pantalla en móvil. */
+.wrap{max-width:1100px;width:100%;min-width:0;margin:0 auto;padding:0 28px}
 .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 
 #intro.on{min-height:100dvh;display:flex!important;flex-direction:column;justify-content:center;padding:56px 0}
@@ -30,7 +32,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-s
 #intro h1 span{color:var(--dimmer)}
 #intro .lede{font-size:clamp(16px,1.9vw,21px);color:var(--dim);max-width:52ch;margin:0 0 38px}
 #intro .lede b{color:var(--fg);font-weight:500}
-.strip{display:flex;gap:2px;height:clamp(100px,17vh,180px);margin:0 0 38px;overflow:hidden}
+.strip{display:flex;gap:2px;height:clamp(100px,17vh,180px);margin:0 0 38px;overflow:hidden;min-width:0}
 .strip img{height:100%;width:auto;object-fit:cover}
 .facts{display:flex;gap:38px;flex-wrap:wrap;margin:0 0 42px;padding-top:22px;border-top:1px solid var(--line)}
 .facts .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dimmer);display:block;margin-bottom:6px}
@@ -61,7 +63,7 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 
 #done.on{display:block!important;padding:clamp(50px,9vh,100px) 0 90px}
 .headline{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:clamp(28px,6vw,72px);align-items:center}
-.num{font-size:clamp(96px,18vw,200px);font-weight:800;letter-spacing:-.06em;line-height:.8}
+.num{font-size:clamp(72px,18vw,200px);font-weight:800;letter-spacing:-.06em;line-height:.8}
 .num i{font-style:normal;color:var(--dimmer)}
 .headline h2{font-size:clamp(23px,3.4vw,40px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:0 0 14px}
 .headline p{margin:0;color:var(--dim);font-size:17px;max-width:48ch}
@@ -80,13 +82,17 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 .global h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dimmer);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .gstate{color:var(--dim);font-size:14px;padding:8px 0}
 .gstate .btn{padding:9px 16px;font-size:13px;margin-left:10px}
-.chart{margin:30px 0 0}
-.bars{display:flex;align-items:flex-end;gap:2px;height:130px;border-bottom:1px solid var(--line);padding-top:26px}
-.bar{flex:1;position:relative;background:var(--dimmer);border-radius:2px 2px 0 0;min-height:0}
-.bar.you{background:var(--fg)}
-.bar .lab{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
-.bar.you .lab{color:var(--fg)}
-.xlab{display:flex;gap:2px;margin-top:8px}
+.chart{margin:34px 0 0}
+/* Cada tramo tiene una columna de fondo siempre visible, para que la gráfica
+   se lea como una distribución de 11 tramos incluso con un solo participante. */
+.bars{display:flex;align-items:stretch;gap:3px;height:132px;border-bottom:1px solid var(--line);padding-top:28px}
+.slot{flex:1;position:relative;display:flex;align-items:flex-end;background:#16181C;border-radius:2px 2px 0 0}
+.slot.you{background:#22252B}
+.slot .fill{width:100%;background:var(--dimmer);border-radius:2px 2px 0 0}
+.slot.you .fill{background:var(--fg)}
+.slot .lab{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
+.slot.you .lab{color:var(--fg)}
+.xlab{display:flex;gap:3px;margin-top:8px}
 .xlab span{flex:1;text-align:center;font-family:var(--mono);font-size:10px;color:var(--dimmer)}
 .gnote{margin:22px 0 0;font-size:12.5px;color:var(--dimmer);max-width:74ch}
 
@@ -101,7 +107,23 @@ footer a{color:var(--dim)}
 .fine{font-size:12.5px;color:var(--dim);line-height:1.6;margin:0 0 10px;max-width:78ch}
 @media (max-width:820px){.wrap{padding:0 18px}#test.on{height:100dvh}.metrics,.split{grid-template-columns:1fr}
 .headline{grid-template-columns:1fr;gap:16px}.hint{display:none}.ans{padding:16px 26px;font-size:15px}
-.bar .lab{font-size:9px}.xlab span:nth-child(even){visibility:hidden}}
+.slot .lab{font-size:9px}
+/* En pantallas cortas la portada se alinea arriba: centrarla dejaría el botón
+   fuera del pliegue y la parte superior inalcanzable al desbordar. */
+#intro.on{justify-content:flex-start;padding:26px 0 36px}
+#intro h1{font-size:clamp(32px,8.6vw,52px);margin:12px 0 16px}
+#intro .lede{font-size:15.5px;margin-bottom:22px}
+.strip{height:clamp(62px,10vh,110px);margin-bottom:22px}
+/* Dos columnas: apilados en una sola, estos datos empujaban el botón
+   "Empezar" fuera del pliegue en pantallas de teléfono. */
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-bottom:24px;padding-top:16px}
+.facts .v{font-size:14px}
+.fineprint{margin-top:18px;font-size:12px}}
+/* Pantallas muy cortas (teléfonos pequeños, móvil en horizontal): la tira es
+   decorativa y se sacrifica para que el botón de inicio quede sobre el pliegue. */
+@media (max-height:620px){#intro .strip{display:none}
+#intro.on{padding:18px 0 28px}#intro h1{margin-bottom:14px}
+#intro .lede{margin-bottom:18px}.facts{margin-bottom:18px;padding-top:14px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -114,7 +136,6 @@ footer a{color:var(--dim)}
   <div class="strip" id="strip"></div>
   <div class="facts">
     <div><span class="k">Imágenes</span><span class="v">30</span></div>
-    <div><span class="k">Pistas</span><span class="v">Ninguna hasta el final</span></div>
     <div><span class="k">Resultado</span><span class="v">Tu nota vs. todos los que ya jugaron</span></div>
     <div><span class="k">Duración</span><span class="v">Unos 4 minutos</span></div>
   </div>
@@ -331,12 +352,14 @@ function renderGlobal(score,my,counts,counted){
   var h='';
   for(var i=0;i<=10;i++){
     var c=counts[i];
-    var hp=max>0?Math.max(c>0?4:1,Math.round(c/max*100)):1;
+    var hp=(c>0&&max>0)?Math.max(8,Math.round(c/max*100)):0;
     var isYou=i===my;
     var lab='';
     if(isYou) lab='<span class="lab">Tú · '+c.toLocaleString('es-MX')+'</span>';
-    else if(i===maxIdx && max>0) lab='<span class="lab">'+c.toLocaleString('es-MX')+'</span>';
-    h+='<div class="bar'+(isYou?' you':'')+'" style="height:'+hp+'%" title="'+bucketLabel(i)+': '+c.toLocaleString('es-MX')+(c===1?' persona':' personas')+'">'+lab+'</div>';
+    /* La etiqueta del tramo más alto se omite si es vecina de la tuya: se solapan. */
+    else if(i===maxIdx && max>0 && c>0 && Math.abs(i-my)>1) lab='<span class="lab">'+c.toLocaleString('es-MX')+'</span>';
+    h+='<div class="slot'+(isYou?' you':'')+'" title="'+bucketLabel(i)+': '+c.toLocaleString('es-MX')+(c===1?' persona':' personas')+'">'+
+       lab+'<div class="fill" style="height:'+hp+'%"></div></div>';
   }
   $('bars').innerHTML=h;
   $('bars').setAttribute('aria-label','Distribución de notas de '+n.toLocaleString('es-MX')+(n===1?' participante':' participantes')+' en tramos de 10 puntos. Tu nota, '+score+', está en el tramo '+bucketLabel(my)+'.');
