@@ -39,13 +39,14 @@ esquema de tramos.
 
 ## Deploy en Vercel
 
-El sitio es estático puro — no hay build ni variables de entorno.
+El sitio es estático puro — no hay build ni variables de entorno. El repo ya está
+conectado al proyecto `test-ai-images` de Vercel: cada push a `main` despliega
+producción automáticamente y cada PR genera un preview.
 
-1. En [vercel.com/new](https://vercel.com/new), importa el repo `EricToled564/TestAIImages`.
-2. Framework preset: **Other** (lo detecta solo). No configures nada más.
-3. Cada push a `main` desplegará producción automáticamente; cada PR genera un preview.
+Nota: si producción muestra `404 NOT_FOUND`, es que `main` aún no contiene la app
+(solo el README semilla) — hay que mergear el PR con `index.html`.
 
-Después del primer deploy:
+Después del primer deploy con la app:
 
 - [ ] Añadir en `index.html` la meta `og:image` con URL absoluta del dominio final
       (LinkedIn la exige para mostrar imagen en el post).
