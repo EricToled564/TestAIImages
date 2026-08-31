@@ -28,7 +28,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-s
 /* min-width:0 evita que el contenido intrínseco (la tira de imágenes) estire
    el contenedor por encima del ancho de la pantalla en móvil. */
 .wrap{max-width:1100px;width:100%;min-width:0;margin:0 auto;padding:0 28px}
-.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 
 #intro.on{min-height:100vh;min-height:100svh;display:flex!important;flex-direction:column;justify-content:center;padding:56px 0}
 #intro h1{font-size:clamp(42px,8vw,110px);font-weight:800;letter-spacing:-.045em;line-height:.92;margin:18px 0 26px;max-width:15ch}
@@ -38,13 +38,13 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-s
 .strip{display:flex;gap:2px;height:clamp(100px,17vh,180px);margin:0 0 38px;overflow:hidden;min-width:0}
 .strip img{height:100%;width:auto;object-fit:cover}
 .facts{display:flex;gap:38px;flex-wrap:wrap;margin:0 0 42px;padding-top:22px;border-top:1px solid var(--line)}
-.facts .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:6px}
-.facts .v{font-size:15px}
+.facts .k{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:6px}
+.facts .v{font-size:16px}
 .btn{appearance:none;border:0;cursor:pointer;font-family:var(--sans);font-weight:600;font-size:16px;background:var(--fg);color:var(--bg);padding:17px 34px;border-radius:2px;transition:opacity .12s}
 .btn:hover{opacity:.85}.btn:focus-visible{outline:2px solid var(--fg);outline-offset:4px}
 .btn.ghost{background:transparent;color:var(--dim);border:1px solid var(--line);font-weight:500}
 .btn.ghost:hover{color:var(--fg);border-color:var(--dim);opacity:1}
-.fineprint{margin:26px 0 0;font-size:12.5px;color:var(--label);max-width:62ch}
+.fineprint{margin:26px 0 0;font-size:14px;color:var(--label);max-width:62ch}
 
 /* svh (viewport pequeño) es la unidad correcta aquí: mide la pantalla CON las
    barras del navegador desplegadas, así que la fila de botones nunca queda
@@ -66,7 +66,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-s
 padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);border:1px solid var(--line);transition:background .14s,color .14s,border-color .14s}
 .ans:hover,.ans:focus-visible{background:var(--fg);color:var(--bg);border-color:var(--fg);outline:none}
 .hint{text-align:center;padding:0 28px 18px;flex:0 0 auto}
-.hint kbd{font-family:var(--mono);font-size:10.5px;border:1px solid var(--line);border-radius:3px;padding:2px 6px;margin:0 2px;color:var(--dim)}
+.hint kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:3px;padding:2px 6px;margin:0 2px;color:var(--dim)}
 
 #done.on{display:block!important;padding:clamp(50px,9vh,100px) 0 90px}
 .headline{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:clamp(28px,6vw,72px);align-items:center}
@@ -76,20 +76,27 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 .headline p{margin:0;color:var(--dim);font-size:17px;max-width:48ch}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;margin:0;overflow:hidden}
 .metrics div{background:var(--bg);padding:24px 22px 26px}
-.metrics .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:14px}
+.metrics .k{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:14px}
 .metrics .v{font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1;margin-bottom:10px}
-.metrics p{margin:0;font-size:13px;color:var(--dim);line-height:1.45}
+.metrics p{margin:0;font-size:14.5px;color:var(--dim);line-height:1.45}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;margin:24px 0 0;overflow:hidden}
 .split div{background:var(--bg);padding:22px}
-.split .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:12px}
+.split .k{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:12px}
 .split .v{font-size:24px;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
-.split p{margin:0;font-size:13px;color:var(--dim)}
+.split p{margin:0;font-size:14.5px;color:var(--dim)}
 
 .global{margin:46px 0 0}
-.global h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.gstate{color:var(--dim);font-size:14px;padding:8px 0}
+.global h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.gstate{color:var(--dim);font-size:15px;padding:8px 0}
 .gstate .btn{padding:9px 16px;font-size:13px;margin-left:10px}
 .chart{margin:34px 0 0}
+/* Cabecera del gráfico: dice qué se cuenta y cuál es la barra más alta, para
+   que la altura de las columnas tenga una escala legible. */
+.chead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+margin:0 0 10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
+text-transform:uppercase;color:var(--label)}
+.chead span:last-child{color:var(--dim);white-space:nowrap}
+.xcap{margin:12px 0 0;font-size:13.5px;color:var(--label);max-width:70ch}
 /* Cada tramo tiene una columna de fondo siempre visible, para que la gráfica
    se lea como una distribución de 11 tramos incluso con un solo participante. */
 .bars{display:flex;align-items:stretch;gap:3px;height:132px;border-bottom:1px solid var(--line);padding-top:28px}
@@ -98,21 +105,21 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 .slot.you{background:#22252B;box-shadow:inset 0 -3px 0 var(--fg)}
 .slot .fill{width:100%;background:var(--dim);border-radius:2px 2px 0 0}
 .slot.you .fill{background:var(--fg)}
-.slot .lab{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
+.slot .lab{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
 .slot.you .lab{color:var(--fg)}
 .xlab{display:flex;gap:3px;margin-top:8px}
-.xlab span{flex:1;text-align:center;font-family:var(--mono);font-size:10px;color:var(--label)}
-.gnote{margin:22px 0 0;font-size:12.5px;color:var(--label);max-width:74ch}
+.xlab span{flex:1;text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--label)}
+.gnote{margin:18px 0 0;font-size:14px;color:var(--label);max-width:74ch}
 
 .essay{margin:44px 0 0;max-width:74ch}
-.essay h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.essay h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .essay p{margin:0 0 15px;font-size:16px;line-height:1.65;color:var(--dim)}
 .essay p b{color:var(--fg);font-weight:600}
 .essay a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--dimmer)}
 .again{display:flex;gap:12px;flex-wrap:wrap;margin:46px 0 0}
 footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line)}
 footer a{color:var(--dim)}
-.fine{font-size:12.5px;color:var(--dim);line-height:1.6;margin:0 0 10px;max-width:78ch}
+.fine{font-size:14px;color:var(--dim);line-height:1.6;margin:0 0 10px;max-width:78ch}
 @media (max-width:820px){.wrap{padding:0 18px}.metrics,.split{grid-template-columns:1fr}
 /* Tope en vh (unidad universal) por si el porcentaje no resuelve: la imagen
    nunca puede empujar los botones fuera de la pantalla. */
@@ -122,7 +129,7 @@ footer a{color:var(--dim)}
 .answers{position:sticky;bottom:0;z-index:2;background:var(--bg);
 padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 .headline{grid-template-columns:1fr;gap:16px}.hint{display:none}.ans{padding:16px 26px;font-size:15px}
-.slot .lab{font-size:9px}
+.slot .lab{font-size:10.5px}
 /* En pantallas cortas la portada se alinea arriba: centrarla dejaría el botón
    fuera del pliegue y la parte superior inalcanzable al desbordar. */
 #intro.on{justify-content:flex-start;padding:26px 0 36px}
@@ -132,13 +139,15 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 /* Dos columnas: apilados en una sola, estos datos empujaban el botón
    "Empezar" fuera del pliegue en pantallas de teléfono. */
 .facts{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-bottom:24px;padding-top:16px}
-.facts .v{font-size:14px}
-.fineprint{margin-top:18px;font-size:12px}}
+.facts .v{font-size:15px}
+.fineprint{margin-top:18px;font-size:13.5px}}
 /* Pantallas muy cortas (teléfonos pequeños, móvil en horizontal): la tira es
    decorativa y se sacrifica para que el botón de inicio quede sobre el pliegue. */
 @media (max-height:620px){#intro .strip{display:none}
-#intro.on{padding:18px 0 28px}#intro h1{margin-bottom:14px}
-#intro .lede{margin-bottom:18px}.facts{margin-bottom:18px;padding-top:14px}}
+#intro.on{padding:18px 0 28px}
+#intro h1{font-size:29px;margin-bottom:14px}
+#intro .lede{font-size:14.5px;margin-bottom:16px}
+.facts{gap:10px 18px;margin-bottom:16px;padding-top:14px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -151,7 +160,7 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   <div class="strip" id="strip"></div>
   <div class="facts">
     <div><span class="k">Imágenes</span><span class="v">30</span></div>
-    <div><span class="k">Resultado</span><span class="v">Tu nota vs. todos los que ya jugaron</span></div>
+    <div><span class="k">Resultado</span><span class="v">Tu nota vs. todas las partidas jugadas</span></div>
     <div><span class="k">Duración</span><span class="v">Unos 4 minutos</span></div>
   </div>
   <div><button class="btn" id="start">Empezar</button></div>
@@ -186,13 +195,15 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
     <div class="gstate" id="gErr" hidden>No se pudo cargar el acumulado global.<button class="btn ghost" id="gRetry">Reintentar</button></div>
     <div id="gBody" hidden>
       <div class="metrics">
-        <div><span class="k">Participantes</span><div class="v" id="gN"></div><p>Resultados acumulados hasta ahora, de forma anónima.</p></div>
-        <div><span class="k">Promedio global</span><div class="v" id="gAvg"></div><p>Nota media de todos los participantes (aproximada por tramos de 10).</p></div>
+        <div><span class="k">Partidas jugadas</span><div class="v" id="gN"></div><p>Total de partidas terminadas hasta ahora, de forma anónima.</p></div>
+        <div><span class="k">Promedio global</span><div class="v" id="gAvg"></div><p>Nota media de todas las partidas (aproximada por tramos de 10).</p></div>
         <div><span class="k" id="gPctK">Superaste a</span><div class="v" id="gPct"></div><p id="gPctNote"></p></div>
       </div>
       <div class="chart">
+        <div class="chead"><span>Partidas por tramo de nota</span><span id="gMax"></span></div>
         <div class="bars" id="bars" role="img" aria-label=""></div>
-        <div class="xlab" aria-hidden="true"><span>0</span><span></span><span></span><span></span><span></span><span>50</span><span></span><span></span><span></span><span></span><span>100</span></div>
+        <div class="xlab" id="xlab" aria-hidden="true"></div>
+        <p class="xcap">Cada columna es un tramo de 10 puntos de la nota. La altura es cuántas partidas cayeron en ese tramo.</p>
       </div>
       <p class="gnote" id="gNote"></p>
     </div>
@@ -209,7 +220,7 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   </div>
   <footer>
     <p class="mono" style="margin:0 0 12px">Aviso</p>
-    <p class="fine">Juego anónimo con fines de divulgación y entretenimiento; no es un instrumento científico. No se recopilan datos personales: ni nombre, ni correo, ni dirección IP. Lo único que se envía al terminar es tu nota final, que se suma a un contador global anónimo. Si juegas varias veces desde el mismo navegador, solo tu primera partida cuenta para el acumulado.</p>
+    <p class="fine">Juego anónimo con fines de divulgación y entretenimiento; no es un instrumento científico. No se recopilan datos personales: ni nombre, ni correo, ni dirección IP. Lo único que se envía al terminar es tu nota final, que se suma a un contador global anónimo. Cada partida terminada suma al acumulado, incluidas las repeticiones.</p>
     <p class="fine">Fotografías reales: Wikimedia Commons — dominio público, CC0 y licencias CC (<a href="creditos.html">créditos</a>). Las imágenes restantes fueron generadas con herramientas de IA.</p>
   </footer>
 </div></section>
@@ -294,8 +305,7 @@ function finish(){
    el acumulado real: añadir ?ns=loquesea a la URL. */
 var AGG_BASE='https://abacus.jasoncameron.dev';
 var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v1-vrk10b';}catch(e){return 'lahizounaia-v1-vrk10b';}})();
-var CONTRIB_KEY='aia_contrib_'+AGG_NS;
-var lastScore=null;
+var lastScore=null, lastCounted=false;
 
 /* El almacén exige claves de 3 a 64 caracteres: b00..b10, nunca b0. */
 function bucketKey(i){return 'b'+(i<10?'0'+i:i);}
@@ -315,31 +325,29 @@ function hitCount(key){
     return r.json().then(function(j){return j.value||0;});
   });
 }
-function loadGlobal(score){
+/* Cada partida terminada suma al acumulado. Al reintentar tras un fallo de red
+   no se vuelve a sumar la misma partida: solo se releen los contadores. */
+function loadGlobal(score,recount){
   lastScore=score;
   var my=bucketOf(score);
-  var contributed=false;
-  try{contributed=!!localStorage.getItem(CONTRIB_KEY);}catch(e){}
-  var counting=!contributed;
+  var counting=(recount!==false);
+  if(counting) lastCounted=false;
   $('gLoad').hidden=false; $('gErr').hidden=true; $('gBody').hidden=true;
   var tasks=[];
   for(var i=0;i<=10;i++){
-    if(i===my && counting){
-      tasks.push(hitCount(bucketKey(i)).then(function(v){
-        try{localStorage.setItem(CONTRIB_KEY,'1');}catch(e){}
-        return v;
-      }));
-    } else {
-      tasks.push(getCount(bucketKey(i)));
-    }
+    /* lastCounted se marca en cuanto la suma entra, no al final: si luego falla
+       otra lectura, el reintento solo relee y la partida no se cuenta dos veces. */
+    tasks.push(i===my&&counting
+      ? hitCount(bucketKey(i)).then(function(v){lastCounted=true;return v;})
+      : getCount(bucketKey(i)));
   }
   Promise.all(tasks).then(function(counts){
-    renderGlobal(score,my,counts,counting);
+    renderGlobal(score,my,counts);
   }).catch(function(){
     $('gLoad').hidden=true; $('gErr').hidden=false;
   });
 }
-function renderGlobal(score,my,counts,counted){
+function renderGlobal(score,my,counts){
   var n=0, sum=0, max=0, maxIdx=0;
   for(var i=0;i<=10;i++){ n+=counts[i]; sum+=counts[i]*bucketMid(i);
     if(counts[i]>max){max=counts[i];maxIdx=i;} }
@@ -352,16 +360,16 @@ function renderGlobal(score,my,counts,counted){
   if(others<1){
     $('gPctK').textContent='Tu posición';
     $('gPct').textContent='1.ª';
-    $('gPctNote').textContent='Eres la primera persona en terminar el juego.';
+    $('gPctNote').textContent='Es la primera partida terminada del juego.';
   } else {
     var below=0; for(var i=0;i<my;i++) below+=counts[i];
     var sameOthers=Math.max(0,counts[my]-1);
     var pct=Math.round(100*(below+0.5*sameOthers)/others);
-    $('gPctK').textContent='Superaste a';
+    $('gPctK').textContent='Mejor que';
     $('gPct').textContent='~'+pct+'%';
     $('gPctNote').textContent=(others<9)
-      ? 'De los demás participantes. Aún hay pocos resultados; esto se irá estabilizando.'
-      : 'De los demás participantes, según el tramo de tu nota.';
+      ? 'De las demás partidas. Aún hay pocas; esto se irá estabilizando.'
+      : 'De las demás partidas, según el tramo de tu nota.';
   }
 
   var h='';
@@ -375,20 +383,27 @@ function renderGlobal(score,my,counts,counted){
     if(isYou) lab='<span class="lab">'+(c>0?'Tú · '+c.toLocaleString('es-MX'):'Tú')+'</span>';
     /* La etiqueta del tramo más alto se omite si es vecina de la tuya: se solapan. */
     else if(i===maxIdx && max>0 && c>0 && Math.abs(i-my)>1) lab='<span class="lab">'+c.toLocaleString('es-MX')+'</span>';
-    h+='<div class="slot'+(isYou?' you':'')+'" title="'+bucketLabel(i)+': '+c.toLocaleString('es-MX')+(c===1?' persona':' personas')+'">'+
+    h+='<div class="slot'+(isYou?' you':'')+'" title="Nota '+bucketLabel(i)+': '+c.toLocaleString('es-MX')+(c===1?' partida':' partidas')+'">'+
        lab+'<div class="fill" style="height:'+hp+'%"></div></div>';
   }
   $('bars').innerHTML=h;
-  $('bars').setAttribute('aria-label','Distribución de notas de '+n.toLocaleString('es-MX')+(n===1?' participante':' participantes')+' en tramos de 10 puntos. Tu nota, '+score+', está en el tramo '+bucketLabel(my)+'.');
+  $('bars').setAttribute('aria-label','Distribución de '+n.toLocaleString('es-MX')+(n===1?' partida':' partidas')+' en tramos de 10 puntos de nota. Tu nota, '+score+', está en el tramo '+bucketLabel(my)+'.');
 
-  $('gNote').textContent=counted
-    ? 'Tu nota se sumó de forma anónima al acumulado. Solo tu primera partida cuenta; si repites, verás la comparación sin volver a sumar.'
-    : 'Tu primera partida ya está contada en el acumulado; esta comparación usa tu nota actual sin volver a sumar.';
+  /* Eje: una etiqueta por columna con el inicio de su tramo (0, 10, … 100),
+     para que se entienda qué nota representa cada barra. */
+  var x='';
+  for(var i=0;i<=10;i++) x+='<span>'+(i*10)+'</span>';
+  $('xlab').innerHTML=x;
+  $('gMax').textContent='Barra más alta: '+max.toLocaleString('es-MX')+(max===1?' partida':' partidas');
+
+  $('gNote').textContent=lastCounted
+    ? 'Tu nota se sumó de forma anónima al acumulado. Cada partida terminada cuenta, incluidas las que repitas.'
+    : 'Esta comparación usa los contadores ya guardados; tu nota no se volvió a sumar.';
 
   $('gLoad').hidden=true; $('gErr').hidden=true; $('gBody').hidden=false;
 }
 
-$('gRetry').onclick=function(){ if(lastScore!==null) loadGlobal(lastScore); };
+$('gRetry').onclick=function(){ if(lastScore!==null) loadGlobal(lastScore,!lastCounted); };
 $('yes').onclick=function(){answer(true);};
 $('no').onclick=function(){answer(false);};
 $('start').onclick=function(){build();render();show('test');};

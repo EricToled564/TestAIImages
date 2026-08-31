@@ -20,9 +20,11 @@ acumulado de todos los participantes (promedio global, percentil aproximado y di
   [Abacus](https://abacus.jasoncameron.dev) — un servicio de contadores sin llaves ni cuenta.
 - **No se envía ningún dato personal**: ni nombre, ni correo, ni IP (el sitio no la guarda;
   Abacus solo aplica rate-limit). Lo único transmitido es "una persona más en el tramo X".
-- Solo la **primera partida por navegador** cuenta (flag en `localStorage`); las repeticiones
-  muestran la comparación sin volver a sumar.
+- **Cada partida terminada suma**, incluidas las repeticiones desde el mismo navegador; por eso
+  el total se etiqueta como *partidas jugadas*, no como personas.
 - El promedio y el percentil se calculan a partir de los tramos, por eso se muestran con `~`.
+- La gráfica dibuja los 11 tramos con una columna de fondo siempre visible, el eje etiquetado
+  de 0 a 100 y la altura de la barra más alta indicada, para que la escala se entienda.
 
 ### Namespace
 
