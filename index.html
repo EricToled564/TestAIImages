@@ -74,6 +74,7 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 .num i{font-style:normal;color:var(--dim)}
 .headline h2{font-size:clamp(23px,3.4vw,40px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:0 0 14px}
 .headline p{margin:0;color:var(--dim);font-size:17px;max-width:48ch}
+.headline .msg{color:var(--fg);font-size:clamp(18px,2.4vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.32;max-width:34ch}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;margin:0;overflow:hidden}
 .metrics div{background:var(--bg);padding:24px 22px 26px}
 .metrics .k{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);display:block;margin-bottom:14px}
@@ -104,11 +105,6 @@ font-family:var(--mono);font-size:13px;letter-spacing:.06em;font-weight:600}
 .pin.all i{top:4px}
 .pin.all b{top:26px}
 .sticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--label)}
-.essay{margin:44px 0 0;max-width:74ch}
-.essay h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.essay p{margin:0 0 15px;font-size:16px;line-height:1.65;color:var(--dim)}
-.essay p b{color:var(--fg);font-weight:600}
-.essay a{color:var(--fg);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--dimmer)}
 .again{display:flex;gap:12px;flex-wrap:wrap;margin:46px 0 0}
 footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line)}
 footer a{color:var(--dim)}
@@ -175,7 +171,7 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   <p class="mono">Tu resultado</p>
   <div class="headline">
     <div class="num" id="num"></div>
-    <div><h2 id="vTitle"></h2><p id="vBody"></p></div>
+    <div><p class="msg" id="vMsg"></p></div>
   </div>
   <div class="split">
     <div><span class="k">Fotos de verdad</span><div class="v" id="mReal"></div><p>Cuántas reconociste como fotografía.</p></div>
@@ -202,11 +198,6 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
     </div>
   </div>
 
-  <div class="essay">
-    <h3>Cómo se calcula</h3>
-    <p><b>Es una nota del 0 al 100.</b> Si contestas al azar, o si dices «IA» a todas sin mirar, te sale <b>50</b>. Para subir de ahí tienes que acertar en las dos cosas: reconocer las fotos de verdad <i>y</i> descubrir las hechas con IA. Si las identificas todas, sacas 100.</p>
-    <p id="refer"></p>
-  </div>
   <div class="again">
     <button class="btn" id="retry">Jugar otra vez</button>
     <button class="btn ghost" id="home">Volver al inicio</button>
@@ -221,6 +212,8 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 <script src="items.js"></script>
 <script>
 var N = ITEMS.length, deck=[], idx=0, hits=0, okReal=0, okAi=0, saidAi=0;
+/* Nota a partir de la cual se puede afirmar estadísticamente que sí distingue. */
+var UMBRAL = 66;
 var N_REAL = ITEMS.filter(function(x){return x.real;}).length;
 var N_AI = N - N_REAL;
 function $(id){return document.getElementById(id);}
@@ -258,36 +251,13 @@ function finish(){
   $('mReal').textContent = okReal+' de '+N_REAL;
   $('mAi').textContent = okAi+' de '+N_AI;
 
-  var title, body;
-  if(score < 45){
-    title='Vas al revés.';
-    body='Estás confundiendo las fotos con las generadas más veces de las que aciertas. Curiosamente eso significa que sí ves algo — solo que lo estás leyendo al contrario.';
-  } else if(score < 58){
-    title='Como lanzar una moneda.';
-    body='Con esta nota, adivinar habría dado lo mismo. No hay señal de que estés distinguiendo unas de otras.';
-  } else if(score < 72){
-    title='Algo ves, pero poco.';
-    body='Estás por encima de adivinar, aunque no por mucho. Se te van casi tantas como cazas.';
-  } else if(score < 88){
-    title='Buen ojo.';
-    body='Distingues con claridad, y aun así una parte se te escapa. Es un resultado alto para lo difícil que es este formato.';
-  } else if(score < 100){
-    title='Ojo entrenado.';
-    body='Muy pocas personas llegan aquí. Fallaste alguna, pero el resto las viste venir.';
-  } else {
-    title='Las treinta.';
-    body='Ni una fallada, en las dos direcciones. Repítelo con otro orden para ver si se sostiene.';
-  }
-  $('vTitle').textContent=title; $('vBody').textContent=body;
+  /* Umbral estadístico: con 10 fotos y 20 imágenes de IA, alcanzar 66 por puro
+     azar tiene una probabilidad del 4,65% incluso con la estrategia de respuesta
+     más favorable al azar. Es el corte del 5% para este juego. */
+  $('vMsg').textContent = score>=UMBRAL
+    ? 'Felicidades. Al parecer aún tenemos que esforzarnos más para crear imágenes que logren confundirse con la realidad.'
+    : 'Parece que la tecnología aplicada por Final Edge ha llegado a un punto en el que te es difícil identificar las imágenes hechas con IA de las imágenes fotográficas reales.';
 
-  var r='';
-  if(okAi < N_AI*0.5 && okReal > N_REAL*0.8)
-    r='Reconoces bien las fotos de verdad, pero se te cuelan las hechas con IA. Es el patrón más común: confiamos de más en lo que parece una foto normal.';
-  else if(okReal < N_REAL*0.5 && okAi > N_AI*0.8)
-    r='Cazas casi todas las hechas con IA, pero desconfías también de las fotos de verdad. Estás siendo más severo de la cuenta.';
-  else
-    r='Repartiste las respuestas entre las dos opciones, así que la nota refleja lo que viste y no una apuesta fija.';
-  $('refer').textContent=r;
   show('done');
   addMine(score);
   loadGlobal(score);

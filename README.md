@@ -15,7 +15,23 @@ acumulado de todos los participantes (promedio global, percentil aproximado y di
 
 ## Qué muestra al terminar
 
-Tres números y una línea:
+La nota, un comentario, los aciertos y tres números con una línea. Nada más.
+
+### El comentario: solo dos, según un umbral estadístico
+
+| Nota | Mensaje |
+|---|---|
+| **menos de 66** | «Parece que la tecnología aplicada por Final Edge ha llegado a un punto en el que te es difícil identificar las imágenes hechas con IA de las imágenes fotográficas reales.» |
+| **66 o más** | «Felicidades. Al parecer aún tenemos que esforzarnos más para crear imágenes que logren confundirse con la realidad.» |
+
+El corte no es arbitrario. Con 10 fotos reales y 20 imágenes de IA, y bajo la hipótesis de
+que la persona no distingue (sus respuestas son independientes de la verdad, con cualquier
+estrategia — incluso contestar siempre lo mismo), la nota tiene media 50. Alcanzar **66**
+por puro azar tiene una probabilidad del **4,65 %** con la estrategia más favorable al azar,
+es decir, el corte del 5 % de una cola para este diseño. Constante `UMBRAL` en `index.html`;
+con α = 0,01 el corte sería 73.
+
+### Los tres números
 
 | | Qué es | De dónde sale |
 |---|---|---|
