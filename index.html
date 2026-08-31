@@ -89,40 +89,21 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 .global h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .gstate{color:var(--dim);font-size:15px;padding:8px 0}
 .gstate .btn{padding:9px 16px;font-size:13px;margin-left:10px}
-.chart{margin:34px 0 0}
-/* Cabecera del gráfico: dice qué se cuenta y cuál es la barra más alta, para
-   que la altura de las columnas tenga una escala legible. */
-.chead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
-margin:0 0 10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
-text-transform:uppercase;color:var(--label)}
-.chead .leg{color:var(--dim);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
-.chead .leg i{display:block;width:18px;border-top:2px dashed var(--dim)}
-/* Línea de la media: el número del recuadro "promedio global" tiene que verse
-   también en la gráfica, si no parece que se contradicen. */
-.bars{position:relative}
-.avgline{position:absolute;top:28px;bottom:0;border-left:2px dashed var(--dim);pointer-events:none}
-/* Marca de tu nota exacta bajo el eje: tu barra es un tramo de 10 puntos,
-   esta punta señala el punto concreto. */
-.axis{position:relative;height:28px;margin-top:3px}
-.mark{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;
-align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--fg);white-space:nowrap}
-.mark i{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
-border-bottom:6px solid var(--fg);margin-bottom:4px}
-.xcap{margin:12px 0 0;font-size:13.5px;color:var(--label);max-width:70ch}
-/* Cada tramo tiene una columna de fondo siempre visible, para que la gráfica
-   se lea como una distribución de 11 tramos incluso con un solo participante. */
-.bars{display:flex;align-items:stretch;gap:3px;height:132px;border-bottom:1px solid var(--line);padding-top:28px}
-.slot{flex:1;position:relative;display:flex;align-items:flex-end;background:#16181C;border-radius:2px 2px 0 0}
-/* Marca en la base: tu tramo se identifica aunque esté vacío (partida repetida). */
-.slot.you{background:#22252B;box-shadow:inset 0 -3px 0 var(--fg)}
-.slot .fill{width:100%;background:var(--dim);border-radius:2px 2px 0 0}
-.slot.you .fill{background:var(--fg)}
-.slot .lab{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
-.slot.you .lab{color:var(--fg)}
-.xlab{display:flex;gap:3px;margin-top:8px}
-.xlab span{flex:1;text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--label)}
-.gnote{margin:18px 0 0;font-size:14px;color:var(--label);max-width:74ch}
-
+/* Una sola línea de 0 a 100 con dos marcas: tu promedio arriba, el promedio
+   global abajo. Nada más — la comparación se lee de un vistazo. */
+.scale{margin:44px 0 0}
+.track{position:relative;height:4px;background:var(--line);border-radius:2px;margin:58px 0 54px}
+.pin{position:absolute;width:0;top:0}
+.pin i{position:absolute;left:0;transform:translateX(-50%);width:2px;height:18px;background:currentColor}
+.pin b{position:absolute;left:0;transform:translateX(-50%);white-space:nowrap;
+font-family:var(--mono);font-size:13px;letter-spacing:.06em;font-weight:600}
+.pin.mine{color:var(--fg)}
+.pin.mine i{bottom:4px}
+.pin.mine b{bottom:26px}
+.pin.all{color:var(--dim)}
+.pin.all i{top:4px}
+.pin.all b{top:26px}
+.sticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--label)}
 .essay{margin:44px 0 0;max-width:74ch}
 .essay h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .essay p{margin:0 0 15px;font-size:16px;line-height:1.65;color:var(--dim)}
@@ -207,18 +188,17 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
     <div class="gstate" id="gErr" hidden>No se pudo cargar el acumulado global.<button class="btn ghost" id="gRetry">Reintentar</button></div>
     <div id="gBody" hidden>
       <div class="metrics">
-        <div><span class="k">Partidas jugadas</span><div class="v" id="gN"></div><p>Total de partidas terminadas hasta ahora, de forma anónima.</p></div>
-        <div><span class="k">Promedio global</span><div class="v" id="gAvg"></div><p>Nota media de todas las partidas (aproximada por tramos de 10).</p></div>
-        <div><span class="k" id="gPctK">Superaste a</span><div class="v" id="gPct"></div><p id="gPctNote"></p></div>
+        <div><span class="k">Tu promedio</span><div class="v" id="gMine"></div></div>
+        <div><span class="k">Tus partidas</span><div class="v" id="gMineN"></div></div>
+        <div><span class="k">Promedio global</span><div class="v" id="gAvg"></div></div>
       </div>
-      <div class="chart">
-        <div class="chead"><span>Partidas por tramo de nota</span><span class="leg" id="gLeg"></span></div>
-        <div class="bars" id="bars" role="img" aria-label=""></div>
-        <div class="axis" aria-hidden="true"><span class="mark" id="youMark"><i></i><b></b></span></div>
-        <div class="xlab" id="xlab" aria-hidden="true"></div>
-        <p class="xcap">Cada columna es un tramo de 10 puntos de la nota y el número de arriba son las partidas que cayeron en él. La punta marca tu nota exacta; la línea de rayas, la media de todas.</p>
+      <div class="scale" id="scale" role="img" aria-label="">
+        <div class="track" id="track">
+          <span class="pin mine" id="pinMine"><b></b><i></i></span>
+          <span class="pin all" id="pinAll"><i></i><b></b></span>
+        </div>
+        <div class="sticks" aria-hidden="true"><span>0</span><span>50</span><span>100</span></div>
       </div>
-      <p class="gnote" id="gNote"></p>
     </div>
   </div>
 
@@ -309,29 +289,45 @@ function finish(){
     r='Repartiste las respuestas entre las dos opciones, así que la nota refleja lo que viste y no una apuesta fija.';
   $('refer').textContent=r;
   show('done');
+  addMine(score);
   loadGlobal(score);
 }
 
-/* ---------- Acumulado global anónimo ----------
-   Almacén: contadores públicos keyless (Abacus). Solo se envía el tramo
-   de la nota final (b0..b10); nada identificable. Para probar sin ensuciar
-   el acumulado real: añadir ?ns=loquesea a la URL. */
+/* ---------- Acumulado ----------
+   Global: contadores públicos keyless (Abacus); solo viaja el tramo de la nota,
+   nada identificable. Tuyo: se guarda en tu navegador, no sale de ahí.
+   Para probar sin tocar los datos reales: añadir ?ns=loquesea a la URL. */
 var AGG_BASE='https://abacus.jasoncameron.dev';
-var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v1-vrk10b';}catch(e){return 'lahizounaia-v1-vrk10b';}})();
-var lastScore=null, lastCounted=false;
+var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v2-vrk10b';}catch(e){return 'lahizounaia-v2-vrk10b';}})();
+var MINE_KEY='aia_mine_'+AGG_NS;
+var lastScore=null, lastCounted=false, mineMem=null;
 
-/* El almacén exige claves de 3 a 64 caracteres: b00..b10, nunca b0. */
+/* El promedio global tiene que ser exacto: si la única partida jugada sacó 50,
+   el global es 50, no una estimación. Por eso se guardan dos cosas: la decena
+   de cada nota (b00..b10) y su unidad (u01..u09). Con eso,
+   suma = 10*Σ(decena·partidas) + Σ(unidad·veces), sin aproximar nada.
+   El almacén exige claves de 3 caracteres como mínimo. */
 function bucketKey(i){return 'b'+(i<10?'0'+i:i);}
+function unitKey(u){return 'u0'+u;}
 function bucketOf(s){return Math.min(10,Math.floor(s/10));}
-function bucketLabel(i){return i===10?'100':(i*10)+'–'+(i*10+9);}
-function bucketMid(i){return i===10?100:i*10+4.5;}
-/* Porcentaje horizontal de una nota dentro de las 11 columnas, para colocar
-   la media y la marca de tu nota exactamente sobre el tramo que les toca. */
-function xPos(v){
-  v=Math.max(0,Math.min(100,v));
-  var slot=Math.min(10,Math.floor(v/10)), frac=v>=100?0:(v%10)/10;
-  return (slot+frac)/11*100;
+/* Posición de una nota en la línea de 0 a 100. */
+function xPos(v){return Math.max(0,Math.min(100,v));}
+
+/* Tus partidas viven solo en este navegador; si no hay almacenamiento
+   (modo privado) al menos se acumulan mientras dure la sesión. */
+function readMine(){
+  if(mineMem) return mineMem;
+  try{var v=JSON.parse(localStorage.getItem(MINE_KEY));
+      if(v&&typeof v.n==='number'&&typeof v.sum==='number') return v;}catch(e){}
+  return {n:0,sum:0};
 }
+function addMine(score){
+  var m=readMine();
+  mineMem={n:m.n+1,sum:m.sum+score};
+  try{localStorage.setItem(MINE_KEY,JSON.stringify(mineMem));}catch(e){}
+  return mineMem;
+}
+
 function getCount(key){
   return fetch(AGG_BASE+'/get/'+AGG_NS+'/'+key).then(function(r){
     if(r.status===404) return 0;
@@ -345,86 +341,58 @@ function hitCount(key){
     return r.json().then(function(j){return j.value||0;});
   });
 }
-/* Cada partida terminada suma al acumulado. Al reintentar tras un fallo de red
-   no se vuelve a sumar la misma partida: solo se releen los contadores. */
+/* Cada partida terminada suma al global. Al reintentar tras un fallo de red no
+   se vuelve a sumar la misma partida: solo se releen los contadores. */
 function loadGlobal(score,recount){
   lastScore=score;
   var my=bucketOf(score);
   var counting=(recount!==false);
   if(counting) lastCounted=false;
   $('gLoad').hidden=false; $('gErr').hidden=true; $('gBody').hidden=true;
+  var myUnit=score%10;
   var tasks=[];
   for(var i=0;i<=10;i++){
-    /* lastCounted se marca en cuanto la suma entra, no al final: si luego falla
-       otra lectura, el reintento solo relee y la partida no se cuenta dos veces. */
     tasks.push(i===my&&counting
       ? hitCount(bucketKey(i)).then(function(v){lastCounted=true;return v;})
       : getCount(bucketKey(i)));
   }
-  Promise.all(tasks).then(function(counts){
-    renderGlobal(score,my,counts);
+  for(var u=1;u<=9;u++){
+    tasks.push(u===myUnit&&counting ? hitCount(unitKey(u)) : getCount(unitKey(u)));
+  }
+  Promise.all(tasks).then(function(all){
+    renderGlobal(all.slice(0,11),all.slice(11));
   }).catch(function(){
     $('gLoad').hidden=true; $('gErr').hidden=false;
   });
 }
-function renderGlobal(score,my,counts){
-  var n=0, sum=0, max=0, maxIdx=0;
-  for(var i=0;i<=10;i++){ n+=counts[i]; sum+=counts[i]*bucketMid(i);
-    if(counts[i]>max){max=counts[i];maxIdx=i;} }
+/* Mantiene la etiqueta dentro de la línea cuando la marca cae en un extremo. */
+function nudge(pin){
+  var b=pin.querySelector('b');
+  b.style.transform='translateX(-50%)';
+  var t=$('track').getBoundingClientRect(), r=b.getBoundingClientRect(), d=0;
+  if(r.left<t.left) d=t.left-r.left;
+  else if(r.right>t.right) d=t.right-r.right;
+  if(d) b.style.transform='translateX(calc(-50% + '+Math.round(d)+'px))';
+}
+function renderGlobal(counts,units){
+  var n=0, sum=0;
+  for(var i=0;i<=10;i++){ n+=counts[i]; sum+=counts[i]*i*10; }
+  for(var u=1;u<=9;u++) sum+=units[u-1]*u;
   if(n<1){ $('gLoad').hidden=true; $('gErr').hidden=false; return; }
 
-  $('gN').textContent=n.toLocaleString('es-MX');
-  $('gAvg').textContent='~'+Math.round(sum/n);
+  var mine=readMine();
+  var mineAvg=mine.n?Math.round(mine.sum/mine.n):0;
+  var allAvg=Math.round(sum/n);
 
-  var others=n-1;
-  if(others<1){
-    $('gPctK').textContent='Tu posición';
-    $('gPct').textContent='1.ª';
-    $('gPctNote').textContent='Es la primera partida terminada del juego.';
-  } else if(n<10){
-    /* Con pocas partidas un porcentaje engaña: si has jugado tú solo, te
-       compara contigo mismo. El puesto dice la verdad sin adornos. */
-    var above=0; for(var i=my+1;i<=10;i++) above+=counts[i];
-    $('gPctK').textContent='Tu puesto';
-    $('gPct').textContent=(above+1)+'.º de '+n;
-    $('gPctNote').textContent='Por tramo de nota, entre las partidas jugadas hasta ahora — las tuyas incluidas.';
-  } else {
-    var below=0; for(var i=0;i<my;i++) below+=counts[i];
-    var sameOthers=Math.max(0,counts[my]-1);
-    var pct=Math.round(100*(below+0.5*sameOthers)/others);
-    $('gPctK').textContent='Mejor que';
-    $('gPct').textContent='~'+pct+'%';
-    $('gPctNote').textContent='De las demás partidas, según el tramo de tu nota. Incluye las tuyas.';
-  }
+  $('gMine').textContent=mineAvg;
+  $('gMineN').textContent=mine.n.toLocaleString('es-MX');
+  $('gAvg').textContent=allAvg;
 
-  var h='';
-  for(var i=0;i<=10;i++){
-    var c=counts[i];
-    var hp=(c>0&&max>0)?Math.max(8,Math.round(c/max*100)):0;
-    var isYou=i===my;
-    /* Cada barra lleva su recuento: sin él, 3 partidas en 2 tramos se leen
-       como "solo 2 partidas". */
-    var lab=c>0?'<span class="lab">'+c.toLocaleString('es-MX')+'</span>':'';
-    h+='<div class="slot'+(isYou?' you':'')+'" title="Nota '+bucketLabel(i)+': '+c.toLocaleString('es-MX')+(c===1?' partida':' partidas')+'">'+
-       lab+'<div class="fill" style="height:'+hp+'%"></div></div>';
-  }
-  var avg=sum/n;
-  h+='<div class="avgline" style="left:'+Math.max(1,Math.min(99,xPos(avg))).toFixed(2)+'%"></div>';
-  $('bars').innerHTML=h;
-  $('gLeg').innerHTML='<i></i>Media '+Math.round(avg);
-  var ym=$('youMark');
-  ym.style.left=Math.max(7,Math.min(93,xPos(score))).toFixed(2)+'%';
-  ym.querySelector('b').textContent='tú '+score;
-  $('bars').setAttribute('aria-label','Distribución de '+n.toLocaleString('es-MX')+(n===1?' partida':' partidas')+' en tramos de 10 puntos de nota. Tu nota, '+score+', está en el tramo '+bucketLabel(my)+'.');
-
-  /* Eje: una etiqueta por columna con el inicio de su tramo (0, 10, … 100),
-     para que se entienda qué nota representa cada barra. */
-  var x='';
-  for(var i=0;i<=10;i++) x+='<span>'+(i*10)+'</span>';
-  $('xlab').innerHTML=x;
-  $('gNote').textContent=lastCounted
-    ? 'Tu nota se sumó de forma anónima al acumulado. Cada partida terminada cuenta, incluidas las que repitas.'
-    : 'Esta comparación usa los contadores ya guardados; tu nota no se volvió a sumar.';
+  var pm=$('pinMine'), pa=$('pinAll');
+  pm.style.left=xPos(mineAvg)+'%'; pm.querySelector('b').textContent='Tú '+mineAvg;
+  pa.style.left=xPos(allAvg)+'%';  pa.querySelector('b').textContent='Todos '+allAvg;
+  nudge(pm); nudge(pa);
+  $('scale').setAttribute('aria-label','En una escala de 0 a 100: tu promedio '+mineAvg+', promedio de todas las partidas '+allAvg+'.');
 
   $('gLoad').hidden=true; $('gErr').hidden=true; $('gBody').hidden=false;
 }
