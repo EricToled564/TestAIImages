@@ -95,7 +95,19 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 .chead{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
 margin:0 0 10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;
 text-transform:uppercase;color:var(--label)}
-.chead span:last-child{color:var(--dim);white-space:nowrap}
+.chead .leg{color:var(--dim);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+.chead .leg i{display:block;width:18px;border-top:2px dashed var(--dim)}
+/* Línea de la media: el número del recuadro "promedio global" tiene que verse
+   también en la gráfica, si no parece que se contradicen. */
+.bars{position:relative}
+.avgline{position:absolute;top:28px;bottom:0;border-left:2px dashed var(--dim);pointer-events:none}
+/* Marca de tu nota exacta bajo el eje: tu barra es un tramo de 10 puntos,
+   esta punta señala el punto concreto. */
+.axis{position:relative;height:28px;margin-top:3px}
+.mark{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;
+align-items:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--fg);white-space:nowrap}
+.mark i{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+border-bottom:6px solid var(--fg);margin-bottom:4px}
 .xcap{margin:12px 0 0;font-size:13.5px;color:var(--label);max-width:70ch}
 /* Cada tramo tiene una columna de fondo siempre visible, para que la gráfica
    se lea como una distribución de 11 tramos incluso con un solo participante. */
@@ -200,10 +212,11 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
         <div><span class="k" id="gPctK">Superaste a</span><div class="v" id="gPct"></div><p id="gPctNote"></p></div>
       </div>
       <div class="chart">
-        <div class="chead"><span>Partidas por tramo de nota</span><span id="gMax"></span></div>
+        <div class="chead"><span>Partidas por tramo de nota</span><span class="leg" id="gLeg"></span></div>
         <div class="bars" id="bars" role="img" aria-label=""></div>
+        <div class="axis" aria-hidden="true"><span class="mark" id="youMark"><i></i><b></b></span></div>
         <div class="xlab" id="xlab" aria-hidden="true"></div>
-        <p class="xcap">Cada columna es un tramo de 10 puntos de la nota. La altura es cuántas partidas cayeron en ese tramo.</p>
+        <p class="xcap">Cada columna es un tramo de 10 puntos de la nota y el número de arriba son las partidas que cayeron en él. La punta marca tu nota exacta; la línea de rayas, la media de todas.</p>
       </div>
       <p class="gnote" id="gNote"></p>
     </div>
@@ -312,6 +325,13 @@ function bucketKey(i){return 'b'+(i<10?'0'+i:i);}
 function bucketOf(s){return Math.min(10,Math.floor(s/10));}
 function bucketLabel(i){return i===10?'100':(i*10)+'–'+(i*10+9);}
 function bucketMid(i){return i===10?100:i*10+4.5;}
+/* Porcentaje horizontal de una nota dentro de las 11 columnas, para colocar
+   la media y la marca de tu nota exactamente sobre el tramo que les toca. */
+function xPos(v){
+  v=Math.max(0,Math.min(100,v));
+  var slot=Math.min(10,Math.floor(v/10)), frac=v>=100?0:(v%10)/10;
+  return (slot+frac)/11*100;
+}
 function getCount(key){
   return fetch(AGG_BASE+'/get/'+AGG_NS+'/'+key).then(function(r){
     if(r.status===404) return 0;
@@ -361,15 +381,20 @@ function renderGlobal(score,my,counts){
     $('gPctK').textContent='Tu posición';
     $('gPct').textContent='1.ª';
     $('gPctNote').textContent='Es la primera partida terminada del juego.';
+  } else if(n<10){
+    /* Con pocas partidas un porcentaje engaña: si has jugado tú solo, te
+       compara contigo mismo. El puesto dice la verdad sin adornos. */
+    var above=0; for(var i=my+1;i<=10;i++) above+=counts[i];
+    $('gPctK').textContent='Tu puesto';
+    $('gPct').textContent=(above+1)+'.º de '+n;
+    $('gPctNote').textContent='Por tramo de nota, entre las partidas jugadas hasta ahora — las tuyas incluidas.';
   } else {
     var below=0; for(var i=0;i<my;i++) below+=counts[i];
     var sameOthers=Math.max(0,counts[my]-1);
     var pct=Math.round(100*(below+0.5*sameOthers)/others);
     $('gPctK').textContent='Mejor que';
     $('gPct').textContent='~'+pct+'%';
-    $('gPctNote').textContent=(others<9)
-      ? 'De las demás partidas. Aún hay pocas; esto se irá estabilizando.'
-      : 'De las demás partidas, según el tramo de tu nota.';
+    $('gPctNote').textContent='De las demás partidas, según el tramo de tu nota. Incluye las tuyas.';
   }
 
   var h='';
@@ -377,16 +402,19 @@ function renderGlobal(score,my,counts){
     var c=counts[i];
     var hp=(c>0&&max>0)?Math.max(8,Math.round(c/max*100)):0;
     var isYou=i===my;
-    var lab='';
-    /* Al repetir partida tu tramo puede estar vacío (tu partida contada cayó en
-       otro): "Tú · 0" se leería como un error, así que ahí va solo "Tú". */
-    if(isYou) lab='<span class="lab">'+(c>0?'Tú · '+c.toLocaleString('es-MX'):'Tú')+'</span>';
-    /* La etiqueta del tramo más alto se omite si es vecina de la tuya: se solapan. */
-    else if(i===maxIdx && max>0 && c>0 && Math.abs(i-my)>1) lab='<span class="lab">'+c.toLocaleString('es-MX')+'</span>';
+    /* Cada barra lleva su recuento: sin él, 3 partidas en 2 tramos se leen
+       como "solo 2 partidas". */
+    var lab=c>0?'<span class="lab">'+c.toLocaleString('es-MX')+'</span>':'';
     h+='<div class="slot'+(isYou?' you':'')+'" title="Nota '+bucketLabel(i)+': '+c.toLocaleString('es-MX')+(c===1?' partida':' partidas')+'">'+
        lab+'<div class="fill" style="height:'+hp+'%"></div></div>';
   }
+  var avg=sum/n;
+  h+='<div class="avgline" style="left:'+Math.max(1,Math.min(99,xPos(avg))).toFixed(2)+'%"></div>';
   $('bars').innerHTML=h;
+  $('gLeg').innerHTML='<i></i>Media '+Math.round(avg);
+  var ym=$('youMark');
+  ym.style.left=Math.max(7,Math.min(93,xPos(score))).toFixed(2)+'%';
+  ym.querySelector('b').textContent='tú '+score;
   $('bars').setAttribute('aria-label','Distribución de '+n.toLocaleString('es-MX')+(n===1?' partida':' partidas')+' en tramos de 10 puntos de nota. Tu nota, '+score+', está en el tramo '+bucketLabel(my)+'.');
 
   /* Eje: una etiqueta por columna con el inicio de su tramo (0, 10, … 100),
@@ -394,8 +422,6 @@ function renderGlobal(score,my,counts){
   var x='';
   for(var i=0;i<=10;i++) x+='<span>'+(i*10)+'</span>';
   $('xlab').innerHTML=x;
-  $('gMax').textContent='Barra más alta: '+max.toLocaleString('es-MX')+(max===1?' partida':' partidas');
-
   $('gNote').textContent=lastCounted
     ? 'Tu nota se sumó de forma anónima al acumulado. Cada partida terminada cuenta, incluidas las que repitas.'
     : 'Esta comparación usa los contadores ya guardados; tu nota no se volvió a sumar.';
