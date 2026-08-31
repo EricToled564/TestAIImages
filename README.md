@@ -13,24 +13,31 @@ acumulado de todos los participantes (promedio global, percentil aproximado y di
 | `creditos.html` | Créditos de las fotografías (⚠️ atribuciones individuales pendientes). |
 | `vercel.json` | Config mínima para Vercel (estático, sin framework). |
 
+## Qué muestra al terminar
+
+Tres números y una línea:
+
+| | Qué es | De dónde sale |
+|---|---|---|
+| **Tu promedio** | media de todas tus partidas | `localStorage` de tu navegador |
+| **Tus partidas** | cuántas has terminado | `localStorage` de tu navegador |
+| **Promedio global** | media de todas las partidas de todos | contadores públicos |
+
+La línea de 0 a 100 marca esos dos promedios: el tuyo arriba, el global abajo.
+
 ## Cómo funciona el acumulado anónimo
 
-- Al terminar una partida, el navegador incrementa **un contador público** correspondiente
-  al tramo de la nota final (`b0`…`b10`, tramos de 10 puntos) en
-  [Abacus](https://abacus.jasoncameron.dev) — un servicio de contadores sin llaves ni cuenta.
-- **No se envía ningún dato personal**: ni nombre, ni correo, ni IP (el sitio no la guarda;
-  Abacus solo aplica rate-limit). Lo único transmitido es "una persona más en el tramo X".
-- **Cada partida terminada suma**, incluidas las repeticiones desde el mismo navegador; por eso
-  el total se etiqueta como *partidas jugadas*, no como personas.
-- El promedio y el percentil se calculan a partir de los tramos, por eso se muestran con `~`.
-- La gráfica dibuja los 11 tramos con una columna de fondo siempre visible, el eje etiquetado
-  de 0 a 100 y la altura de la barra más alta indicada, para que la escala se entienda.
-
-### Namespace
-
-Los contadores viven en el namespace `lahizounaia-v1-vrk10b`. Para **probar sin ensuciar
-los datos reales**, abre la página con `?ns=cualquier-cosa`. Para **resetear el acumulado**
-antes del lanzamiento, cambia el sufijo del namespace en `index.html` (constante `AGG_NS`).
+- Al terminar, el navegador incrementa contadores públicos en
+  [Abacus](https://abacus.jasoncameron.dev) (servicio sin llaves ni cuenta): uno para la
+  **decena** de la nota (`b00`…`b10`) y otro para su **unidad** (`u01`…`u09`).
+- Con esas dos piezas el promedio global es **exacto**, no una estimación:
+  `suma = 10·Σ(decena × partidas) + Σ(unidad × veces)`. Hace falta porque el servicio solo
+  sabe sumar de uno en uno (`/set` y `/update` exigen clave de administrador, que no puede
+  vivir en el cliente).
+- **No se envía ningún dato personal**: ni nombre, ni correo, ni IP. Solo "una partida más
+  con esta nota".
+- **Cada partida terminada suma**, incluidas las repeticiones.
+- Tus propios números no salen de tu navegador.
 
 ### Límite conocido
 
