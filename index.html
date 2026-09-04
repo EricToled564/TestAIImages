@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>¿La hizo una IA?</title>
-<meta name="description" content="30 imágenes, una por una: ¿foto real o generada por IA? Nota 0–100 y comparación anónima con todos los que ya jugaron.">
+<meta name="description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 30 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="¿La hizo una IA?">
-<meta property="og:description" content="30 imágenes, una por una: ¿foto real o generada por IA? Nota 0–100 y comparación anónima con todos los que ya jugaron.">
+<meta property="og:description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 30 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
 <meta property="og:locale" content="es_MX">
 <meta name="twitter:card" content="summary">
 <!-- TODO tras conocer el dominio final: añadir og:image con URL absoluta (LinkedIn la exige), p. ej.
@@ -105,6 +105,10 @@ font-family:var(--mono);font-size:13px;letter-spacing:.06em;font-weight:600}
 .pin.all i{top:4px}
 .pin.all b{top:26px}
 .sticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--label)}
+.reveal{margin:52px 0 0;max-width:70ch;padding-top:26px;border-top:1px solid var(--line)}
+.reveal h3{font-size:clamp(20px,2.6vw,28px);font-weight:800;letter-spacing:-.025em;margin:0 0 16px}
+.reveal p{margin:0 0 14px;font-size:16px;line-height:1.65;color:var(--dim)}
+.reveal p b{color:var(--fg);font-weight:600}
 .again{display:flex;gap:12px;flex-wrap:wrap;margin:46px 0 0}
 footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line)}
 footer a{color:var(--dim)}
@@ -144,8 +148,8 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 
 <section class="screen on" id="intro"><div class="wrap">
   <p class="mono">Prueba de percepción</p>
-  <h1>¿Esta foto la tomó alguien <span>o la escribió alguien?</span></h1>
-  <p class="lede">Treinta imágenes, una por una. En cada una respondes lo mismo: <b>si la generó una IA o si es una fotografía</b>. Sin comparación al lado, que es como te las vas a encontrar en la vida real.</p>
+  <h1>Dicen que una imagen hecha con IA <span>se reconoce a simple vista.</span></h1>
+  <p class="lede">Fría. Artificial. Sin alma. Es la objeción de siempre, y suena razonable — hasta que la pones a prueba. Treinta imágenes, una por una, sin nada al lado con qué compararlas. <b>Tú decides cuál es cuál.</b></p>
   <div class="strip" id="strip"></div>
   <div class="facts">
     <div><span class="k">Imágenes</span><span class="v">30</span></div>
@@ -198,6 +202,11 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
     </div>
   </div>
 
+  <div class="reveal">
+    <h3>Estas imágenes las hicimos nosotros</h3>
+    <p>Las veinte imágenes generadas que acabas de ver salieron de <b>Final Edge</b>.</p>
+    <p>Ninguna nació de escribir un prompt y aceptar el primer resultado. Lo que separa una imagen extraordinaria de una imagen fría no es el modelo: es el criterio de quien la dirige — encuadre, luz, casting, intención, cuántas veces se descarta antes de que sirva. Treinta años del lado del cliente nos enseñaron qué hace que una imagen funcione, y ese oficio es lo que ponemos a trabajar con la IA.</p>
+  </div>
   <div class="again">
     <button class="btn" id="retry">Jugar otra vez</button>
     <button class="btn ghost" id="home">Volver al inicio</button>
@@ -205,7 +214,7 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   <footer>
     <p class="mono" style="margin:0 0 12px">Aviso</p>
     <p class="fine">Juego anónimo con fines de divulgación y entretenimiento; no es un instrumento científico. No se recopilan datos personales: ni nombre, ni correo, ni dirección IP. Lo único que se envía al terminar es tu nota final, que se suma a un contador global anónimo. Cada partida terminada suma al acumulado, incluidas las repeticiones.</p>
-    <p class="fine">Fotografías reales: Wikimedia Commons — dominio público, CC0 y licencias CC (<a href="creditos.html">créditos</a>). Las imágenes restantes fueron generadas con herramientas de IA.</p>
+    <p class="fine">Las 10 fotografías reales provienen de Wikimedia Commons — dominio público, CC0 y licencias CC (<a href="creditos.html">créditos</a>). Las 20 imágenes generadas con IA son obra de Final Edge.</p>
   </footer>
 </div></section>
 
@@ -268,7 +277,7 @@ function finish(){
    nada identificable. Tuyo: se guarda en tu navegador, no sale de ahí.
    Para probar sin tocar los datos reales: añadir ?ns=loquesea a la URL. */
 var AGG_BASE='https://abacus.jasoncameron.dev';
-var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v2-vrk10b';}catch(e){return 'lahizounaia-v2-vrk10b';}})();
+var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v3-vrk10b';}catch(e){return 'lahizounaia-v3-vrk10b';}})();
 var MINE_KEY='aia_mine_'+AGG_NS;
 var lastScore=null, lastCounted=false, mineMem=null;
 
