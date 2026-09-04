@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel · ¿La hizo una IA?</title>
+<!-- Página no enlazada desde ningún sitio y excluida de buscadores. -->
+<meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08090A;--surface:#121316;--line:#26282D;--fg:#FAFAF9;--dim:#8B909A;--label:#868C96;
+--bien:#4ADE80;--mal:#F87171;
+--sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+--mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 24px 80px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+h1{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:10px 0 14px}
+.lede{color:var(--dim);margin:0 0 28px;max-width:70ch}
+
+.resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;
+background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:0 0 14px}
+.resumen div{background:var(--bg);padding:14px 16px}
+.resumen .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--label);display:block;margin-bottom:7px}
+.resumen .v{font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1}
+
+.nota{border-left:2px solid var(--line);padding:2px 0 2px 14px;margin:0 0 30px;color:var(--label);
+font-size:14px;max-width:78ch}
+.nota b{color:var(--fg);font-weight:600}
+
+.barra-carga{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin:20px 0}
+.barra-carga i{display:block;height:100%;width:0;background:var(--fg);transition:width .25s}
+
+table{width:100%;border-collapse:collapse}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--label);
+text-align:left;font-weight:500;padding:0 12px 10px;border-bottom:1px solid var(--line)}
+th.n,td.n{text-align:right;white-space:nowrap}
+td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:hover td{background:var(--surface)}
+td.mini{width:92px;padding-left:0}
+td.mini img{display:block;width:76px;height:76px;object-fit:cover;border-radius:2px;background:var(--surface)}
+.pos{font-family:var(--mono);font-size:12px;color:var(--label);width:38px}
+.pct{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.pct.bien{color:var(--bien)}
+.pct.mal{color:var(--mal)}
+.sub{font-family:var(--mono);font-size:11px;color:var(--label);margin-top:4px}
+.medida{min-width:170px}
+.riel{position:relative;height:8px;background:var(--surface);border:1px solid var(--line);
+border-radius:2px;overflow:hidden}
+.riel i{display:block;height:100%;background:var(--dim)}
+.riel i.bien{background:var(--bien)}
+.riel i.mal{background:var(--mal)}
+.riel u{position:absolute;top:-3px;bottom:-3px;left:50%;width:1px;background:var(--dim);opacity:.75}
+.pie{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--label)}
+
+.aviso{margin:34px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:3px;
+color:var(--label);font-size:13.5px;max-width:80ch}
+.aviso b{color:var(--fg);font-weight:600}
+.estado{color:var(--dim);padding:18px 0}
+.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--dim);
+cursor:pointer;font-family:var(--sans);font-size:13px;padding:9px 15px;border-radius:2px}
+.btn:hover{color:var(--fg);border-color:var(--dim)}
+@media (max-width:720px){
+  td.mini{width:64px} td.mini img{width:56px;height:56px}
+  .medida{display:none} th.medida{display:none}
+  .wrap{padding:28px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="mono">Panel interno · Final Edge</p>
+  <h1>Qué tan bien aguanta cada imagen</h1>
+  <p class="lede">De las veinte imágenes generadas, el porcentaje de personas que la señaló como
+  hecha con IA. Cuanto más abajo en la lista, más convence.</p>
+
+  <div class="resumen">
+    <div><span class="k">Partidas medidas</span><span class="v" id="runs">—</span></div>
+    <div><span class="k">Se reconoce, promedio</span><span class="v" id="prom">—</span></div>
+    <div><span class="k">La más convincente</span><span class="v" id="mejor">—</span></div>
+    <div><span class="k">La más delatada</span><span class="v" id="peor">—</span></div>
+  </div>
+  <p class="nota" id="nota"></p>
+
+  <div class="barra-carga" id="carga" hidden><i id="cargaI"></i></div>
+  <p class="estado" id="estado">Leyendo contadores…</p>
+
+  <table id="tabla" hidden>
+    <thead><tr>
+      <th></th><th></th>
+      <th>Imagen</th>
+      <th class="n">La reconocen</th>
+      <th class="n">No la reconocen</th>
+      <th class="medida">Contra el azar</th>
+    </tr></thead>
+    <tbody id="filas"></tbody>
+  </table>
+
+  <div class="aviso">
+    <p style="margin:0 0 10px"><b>Cómo leerlo.</b> Cada partida muestra las treinta imágenes, así que
+    toda partida medida expone cada imagen exactamente una vez. El porcentaje es
+    «veces que la señalaron como IA» entre «partidas medidas».</p>
+    <p style="margin:0 0 10px">La marca del medio de cada barra es el <b>50 %</b>: lo que saldría si
+    la gente contestara al azar. Una imagen por debajo del 50 % engaña más que una moneda al aire.</p>
+    <p style="margin:0" id="aviso-muestra"></p>
+  </div>
+
+  <p style="margin-top:26px"><button class="btn" id="recargar">Volver a leer</button></p>
+</div>
+
+<script src="items.js"></script>
+<script>
+var BASE='https://abacus.jasoncameron.dev';
+var NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v3-vrk10b';}
+        catch(e){return 'lahizounaia-v3-vrk10b';}})();
+function $(id){return document.getElementById(id);}
+
+/* Misma ventana deslizante que el juego: el servicio corta a 30 peticiones cada
+   10 s por IP y aquí se leen 21 contadores de una sentada. */
+var CUPO=25, envios=[], cola=[];
+function bombear(){
+  var lim=Date.now()-10000;
+  while(envios.length && envios[0]<=lim) envios.shift();
+  while(cola.length && envios.length<CUPO){ envios.push(Date.now()); cola.shift()(); }
+  if(cola.length) setTimeout(bombear, Math.max(50, envios[0]+10000-Date.now()+50));
+}
+function pedir(url){
+  return new Promise(function(res,rej){
+    cola.push(function(){ fetch(url).then(res,rej); });
+    bombear();
+  });
+}
+var hechas=0, totales=0;
+function get(key){
+  return pedir(BASE+'/get/'+NS+'/'+key).then(function(r){
+    hechas++; $('cargaI').style.width=Math.round(hechas/totales*100)+'%';
+    if(r.status===404) return 0;                 /* contador aún sin crear */
+    if(!r.ok) throw new Error('get '+r.status);
+    return r.json().then(function(j){return j.value||0;});
+  });
+}
+
+var generadas=ITEMS.filter(function(x){return !x.real;});
+
+function cargar(){
+  $('estado').hidden=false; $('estado').textContent='Leyendo contadores…';
+  $('tabla').hidden=true; $('carga').hidden=false;
+  hechas=0; totales=generadas.length+1; $('cargaI').style.width='0%';
+
+  var tareas=[get('runs')];
+  for(var i=0;i<generadas.length;i++) tareas.push(get('i'+generadas[i].id));
+
+  Promise.all(tareas).then(function(v){
+    $('carga').hidden=true;
+    pintar(v[0], v.slice(1));
+  })['catch'](function(e){
+    $('carga').hidden=true;
+    $('estado').textContent='No se pudieron leer los contadores ('+e.message+'). Reintenta en unos segundos.';
+  });
+}
+
+function pintar(runs, cuentas){
+  $('runs').textContent=runs.toLocaleString('es-MX');
+
+  if(runs<1){
+    $('estado').hidden=false;
+    $('estado').textContent='Todavía no hay partidas medidas. El registro por imagen arranca desde ahora: en cuanto alguien termine una partida aparecerán aquí.';
+    $('nota').innerHTML='El contador por imagen es <b>independiente</b> del histórico de partidas: empieza en cero a propósito, para no mezclar partidas anteriores que no traían este dato.';
+    $('aviso-muestra').textContent='';
+    return;
+  }
+  $('estado').hidden=true;
+
+  var filas=generadas.map(function(it,i){
+    var vistas=cuentas[i];
+    return {it:it, vistas:vistas, pct:vistas/runs*100};
+  });
+  /* De la más convincente a la más delatada. */
+  filas.sort(function(a,b){return a.pct-b.pct;});
+
+  var suma=filas.reduce(function(s,f){return s+f.pct;},0);
+  $('prom').textContent=Math.round(suma/filas.length)+'%';
+  $('mejor').textContent=Math.round(filas[0].pct)+'%';
+  $('peor').textContent=Math.round(filas[filas.length-1].pct)+'%';
+
+  var html='';
+  filas.forEach(function(f,n){
+    var pct=f.pct, resto=100-pct;
+    var clase = pct<50 ? 'bien' : pct>60 ? 'mal' : '';
+    html+='<tr>'
+      + '<td class="pos">'+(n+1)+'</td>'
+      + '<td class="mini"><img src="'+f.it.src+'" alt=""></td>'
+      + '<td><span class="mono">'+f.it.id+'</span></td>'
+      + '<td class="n"><div class="pct '+clase+'">'+pct.toFixed(1)+'%</div>'
+        + '<div class="sub">'+f.vistas.toLocaleString('es-MX')+' de '+runs.toLocaleString('es-MX')+'</div></td>'
+      + '<td class="n"><div class="pct">'+resto.toFixed(1)+'%</div></td>'
+      + '<td class="medida"><div class="riel"><i class="'+clase+'" style="width:'+Math.min(100,pct).toFixed(1)+'%"></i><u></u></div></td>'
+      + '</tr>';
+  });
+  $('filas').innerHTML=html;
+  $('tabla').hidden=false;
+
+  var bajo50=filas.filter(function(f){return f.pct<50;}).length;
+  $('nota').innerHTML='<b>'+bajo50+' de '+filas.length+'</b> imágenes engañan a más de la mitad de quienes las ven.';
+
+  /* Margen de error de una proporción al 95%: 1,96·sqrt(0,25/n) en el peor caso. */
+  var margen=1.96*Math.sqrt(0.25/runs)*100;
+  $('aviso-muestra').innerHTML= runs<30
+    ? '<b>Muestra pequeña ('+runs+' partidas).</b> Con tan pocos datos cada porcentaje se mueve hasta ±'
+      + margen.toFixed(0) + ' puntos. Sirve para ver la tendencia, no para presumir cifras.'
+    : 'Con '+runs.toLocaleString('es-MX')+' partidas, cada porcentaje tiene un margen de ±'
+      + margen.toFixed(1) + ' puntos (95% de confianza).';
+}
+
+$('recargar').onclick=cargar;
+cargar();
+</script>
+</body>
+</html>

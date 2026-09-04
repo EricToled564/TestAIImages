@@ -55,12 +55,45 @@ La línea de 0 a 100 marca esos dos promedios: el tuyo arriba, el global abajo.
 - **Cada partida terminada suma**, incluidas las repeticiones.
 - Tus propios números no salen de tu navegador.
 
+## Panel por imagen
+
+`panel-9009ly4u2c2h8y.html` lista las 20 imágenes generadas con el porcentaje de gente que
+señaló cada una como hecha con IA, de la más convincente a la más delatada.
+
+- Cada imagen lleva un **id de contenido** (SHA-256 de sus bytes, 10 hex) guardado en `items.js`.
+  Si se sustituye una imagen su id cambia solo y sus estadísticas arrancan de cero; reordenar
+  el banco no afecta a nada.
+- Al terminar, el navegador incrementa `i<id>` por cada imagen generada que la persona señaló
+  como IA, más `runs`.
+- El divisor es **`runs`**, no el total histórico de partidas: cuando se añadió este registro ya
+  había partidas contadas sin datos por imagen, y usarlas daría porcentajes falsos. Como cada
+  partida muestra las 30 imágenes, toda partida contada expone cada imagen exactamente una vez.
+
+### El límite de peticiones obliga a hacer cola
+
+Terminar una partida necesita hasta 41 peticiones (20 para leer el promedio global, 21 para
+registrar la partida imagen por imagen) y el servicio corta a 30 cada 10 s por IP. Ambas páginas
+usan una **ventana deslizante** de 25: se cuentan los envíos de los últimos 10 s y no se pasa de
+ahí. Un cubo de fichas no sirve — arrancando lleno y reponiéndose deja pasar el doble del cupo
+en la primera ventana (medido: 41). Las lecturas que la persona está esperando se encolan con
+prioridad; las escrituras drenan detrás en unos 10 s. Si cierra la pestaña antes, se pierden las
+que falten.
+
 ### Límite conocido
 
-Los contadores de Abacus son públicos: cualquiera que conozca el namespace podría inflarlos.
-Para un juego de LinkedIn es un riesgo aceptable; si algún día se necesita algo blindado,
-el reemplazo natural es una función serverless + KV (p. ej. Upstash) manteniendo el mismo
-esquema de tramos.
+Los contadores de Abacus son públicos: cualquiera que conozca el namespace podría inflarlos
+o leerlos. El namespace vive en el código del cliente, que es público, así que **el panel no
+es privado en sentido estricto**: su nombre de archivo no está enlazado ni indexado, pero el
+repositorio es público y las cifras son legibles por cualquiera que lea el fuente. Es
+oscuridad, no control de acceso.
+
+Para un juego de LinkedIn es un riesgo aceptable. Si hiciera falta algo blindado —datos que
+nadie más pueda leer ni inflar— el reemplazo natural es una función serverless + KV
+(p. ej. Vercel KV o Upstash) con la clave en variable de entorno y el panel detrás de
+autenticación, manteniendo el mismo esquema de contadores.
+
+Las claves caducan a los **6 meses sin accesos**; cada lectura o escritura reinicia el plazo,
+así que mientras el juego tenga tráfico no expiran.
 
 ## Deploy en Vercel
 
