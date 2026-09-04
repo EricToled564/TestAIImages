@@ -9,9 +9,16 @@
 <meta property="og:title" content="¿La hizo una IA?">
 <meta property="og:description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 30 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
 <meta property="og:locale" content="es_MX">
-<meta name="twitter:card" content="summary">
-<!-- TODO tras conocer el dominio final: añadir og:image con URL absoluta (LinkedIn la exige), p. ej.
-<meta property="og:image" content="https://TU-DOMINIO/og.png"> -->
+<meta name="twitter:card" content="summary_large_image">
+<!-- LinkedIn exige URL absoluta y no sigue redirecciones al rastrear la vista
+     previa; con una ruta relativa el enlace se publica sin imagen. -->
+<meta property="og:url" content="https://test-ai-images.vercel.app/">
+<meta property="og:image" content="https://test-ai-images.vercel.app/og.png">
+<meta property="og:image:secure_url" content="https://test-ai-images.vercel.app/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Treinta imágenes, una por una: ¿fotografía real o generada con IA?">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
