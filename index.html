@@ -72,7 +72,7 @@ padding:16px 40px;border-radius:2px;background:var(--surface);color:var(--fg);bo
 #done.on,#marca.on{height:100vh;height:100svh;display:flex!important;flex-direction:column;
 justify-content:center;padding:26px 0;overflow:hidden}
 #done .wrap,#marca .wrap{max-height:100%}
-.headline{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:clamp(20px,4vw,52px);align-items:center}
+.headline{display:grid;grid-template-columns:1fr;gap:min(14px,1.6svh);align-items:start}
 .num{font-size:clamp(42px,min(11vw,9.5svh),132px);font-weight:800;letter-spacing:-.06em;line-height:.8}
 .num i{font-style:normal;color:var(--dim)}
 .headline h2{font-size:clamp(23px,3.4vw,40px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:0 0 14px}
@@ -92,6 +92,12 @@ justify-content:center;padding:26px 0;overflow:hidden}
 .global{margin:min(20px,2.4svh) 0 0}
 .global h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--label);margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .gstate{color:var(--dim);font-size:15px;padding:8px 0}
+.dgrid{display:grid;grid-template-columns:1fr}
+.dcol{min-width:0}
+.reveal{margin:min(26px,3svh) 0 0;padding-top:min(20px,2.4svh);border-top:1px solid var(--line)}
+/* En su propia pantalla el bloque no necesita separador ni margen superior. */
+#marcaSlot .reveal{margin:0;padding-top:0;border-top:0}
+.aviso a,.reveal a{color:var(--dim)}
 .rTitle{font-size:clamp(21px,min(3.6vw,5svh),46px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:min(14px,1.6svh) 0 min(18px,2svh);max-width:20ch}
 .rLead{font-size:clamp(15px,min(1.7vw,2.4svh),21px);color:var(--fg);margin:0 0 min(16px,1.8svh);max-width:52ch}
 .rLead b{font-weight:700}
@@ -149,6 +155,42 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 /* Pantallas muy cortas (teléfonos pequeños, móvil en horizontal): la tira es
    decorativa y se sacrifica para que el botón de inicio quede sobre el pliegue. */
 /* La tira es decorativa: se va antes que cualquier contenido con información. */
+/* En pantallas grandes sobra sitio: la compactación de móvil dejaba el
+   contenido pequeño y flotando. Aquí se devuelve el tamaño. */
+@media (min-width:1000px) and (min-height:700px){
+.dgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,4vw,64px);align-items:stretch}
+.dcol{display:flex;flex-direction:column;justify-content:center}
+#verMas{display:none}
+#done .again{margin-top:min(28px,3.2svh)}}
+@media (min-height:700px) and (min-width:900px){
+#done.on,#marca.on,#intro.on{padding:30px 0}
+.num{font-size:clamp(76px,11svh,150px)}
+.headline{gap:clamp(32px,4.5vw,64px)}
+.headline .msg{font-size:clamp(18px,2.5svh,26px)}
+.split{margin-top:min(30px,3.6svh)}
+.split div{padding:14px 18px}
+.split .k{font-size:11.5px;letter-spacing:.15em;margin-bottom:10px}
+.split .v{font-size:26px}
+.global{margin-top:min(34px,4svh)}
+.global h3{font-size:12px;margin-bottom:10px;padding-bottom:8px}
+.metrics div{padding:14px 18px 15px}
+.metrics .k{font-size:11.5px;letter-spacing:.15em;margin-bottom:12px}
+.metrics .v{font-size:30px}
+.scale{margin-top:min(24px,2.8svh)}
+.track{margin:min(40px,4.6svh) 0 min(38px,4.4svh)}
+.pin b{font-size:14px}
+.again{margin-top:min(36px,4.4svh)}
+#done .btn,#marca .btn{padding:16px 28px;font-size:15.5px}
+#intro h1{font-size:clamp(56px,8.6svh,86px);margin-bottom:min(26px,3svh)}
+#intro .lede{font-size:clamp(18px,2.6svh,22px);margin-bottom:min(32px,3.6svh)}
+.strip{height:clamp(96px,14svh,170px);margin-bottom:min(32px,3.6svh)}
+.facts{gap:38px;padding-top:20px;margin-bottom:min(32px,3.6svh)}
+.facts .v{font-size:15.5px}
+.fineprint{font-size:13.5px}
+.rTitle{font-size:clamp(34px,6svh,54px)}
+.rLead{font-size:clamp(19px,2.8svh,24px)}
+.rBody{font-size:clamp(16px,2.2svh,19px)}
+.aviso{font-size:13px}}
 @media (max-height:760px){.strip{height:clamp(44px,7svh,90px);margin-bottom:min(18px,2svh)}
 .fineprint{font-size:12px;margin-top:min(12px,1.5svh)}}
 @media (max-height:700px){#intro .strip{display:none}}
@@ -159,7 +201,12 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 .facts .k{margin-bottom:2px;font-size:9.5px}.facts .v{font-size:12.5px}
 .fineprint{font-size:11px;margin-top:12px}
 #done .btn,#marca .btn{padding:11px 15px;font-size:13.5px}
-.rBody{font-size:13px}.aviso{font-size:10.5px;margin-top:12px}
+.rBody{font-size:12.5px;line-height:1.45}.aviso{font-size:10.5px;margin-top:10px}
+#marca .again{margin-top:10px}.rTitle{margin-bottom:8px}.rLead{margin-bottom:8px}
+.rBody{font-size:11.5px;line-height:1.38}.again{margin-top:min(14px,1.8svh)}
+.rTitle{font-size:clamp(18px,4.6svh,28px)}.rLead{font-size:13px}
+#marca .btn{padding:10px 14px;font-size:13px}.aviso{font-size:10.5px}
+#marca>.wrap>.mono{display:none}
 #intro .strip{display:none}
 #intro.on{padding:18px 0 28px}
 #intro h1{font-size:29px;margin-bottom:14px}
@@ -170,6 +217,7 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 .metrics div,.split div{padding:8px 9px 9px}
 .metrics .v{font-size:20px}.split .v{font-size:16px}
 .track{margin:38px 0 34px}}
+@media (max-height:600px){#marca.on{height:auto;min-height:100svh;overflow:visible}}
 @media (max-height:430px){#done.on,#marca.on,#intro.on{height:auto;min-height:100svh;overflow:visible}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -201,7 +249,8 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   <p class="hint mono"><kbd>S</kbd> generada &nbsp;·&nbsp; <kbd>N</kbd> fotografía</p>
 </section>
 
-<section class="screen" id="done"><div class="wrap">
+<section class="screen" id="done"><div class="wrap dgrid">
+  <div class="dcol">
   <p class="mono">Tu resultado</p>
   <div class="headline">
     <div class="num" id="num"></div>
@@ -227,22 +276,30 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
           <span class="pin mine" id="pinMine"><b></b><i></i></span>
           <span class="pin all" id="pinAll"><i></i><b></b></span>
         </div>
-        <div class="sticks" aria-hidden="true"><span>0</span><span>50</span><span>100</span></div>
+        <!-- Solo los extremos: el 50 chocaba con la etiqueta del promedio global,
+             que casi siempre cae ahí. En la línea van dos números, no cuatro. -->
+        <div class="sticks" aria-hidden="true"><span>0</span><span>100</span></div>
       </div>
     </div>
   </div>
 
+  </div>
+  <div class="dcol" id="doneCol">
+  <div class="reveal" id="reveal">
+    <h2 class="rTitle">Estas imágenes las hicimos nosotros</h2>
+    <p class="rLead">Las veinte imágenes generadas que acabas de ver salieron de <b>Final Edge</b>.</p>
+    <p class="rBody">Ninguna nació de escribir un prompt y aceptar el primer resultado. Lo que separa una imagen extraordinaria de una imagen fría no es el modelo: es el criterio de quien la dirige — encuadre, luz, casting, intención, cuántas veces se descarta antes de que sirva. Treinta años del lado del cliente nos enseñaron qué hace que una imagen funcione, y ese oficio es lo que ponemos a trabajar con la IA.</p>
+  </div>
   <div class="again">
     <button class="btn" id="verMas">Quién las hizo</button>
     <button class="btn ghost" id="retry">Jugar otra vez</button>
+  </div>
   </div>
 </div></section>
 
 <section class="screen" id="marca"><div class="wrap">
   <p class="mono">Detrás de la prueba</p>
-  <h2 class="rTitle">Estas imágenes las hicimos nosotros</h2>
-  <p class="rLead">Las veinte imágenes generadas que acabas de ver salieron de <b>Final Edge</b>.</p>
-  <p class="rBody">Ninguna nació de escribir un prompt y aceptar el primer resultado. Lo que separa una imagen extraordinaria de una imagen fría no es el modelo: es el criterio de quien la dirige — encuadre, luz, casting, intención, cuántas veces se descarta antes de que sirva. Treinta años del lado del cliente nos enseñaron qué hace que una imagen funcione, y ese oficio es lo que ponemos a trabajar con la IA.</p>
+  <div id="marcaSlot"></div>
   <div class="again">
     <button class="btn" id="retry2">Jugar otra vez</button>
     <button class="btn ghost" id="home">Volver al inicio</button>
@@ -415,6 +472,17 @@ $('start').onclick=function(){build();render();show('test');};
 $('retry').onclick=function(){build();render();show('test');};
 $('retry2').onclick=function(){build();render();show('test');};
 $('verMas').onclick=function(){show('marca');};
+/* El bloque de marca vive en los resultados cuando hay sitio para las dos
+   columnas; en pantallas pequeñas se traslada a su propia pantalla. Es el
+   mismo nodo, no una copia. */
+var anchoSuficiente = window.matchMedia('(min-width:1000px) and (min-height:700px)');
+function ubicarRevelacion(){
+  var rev=$('reveal'), cabe=anchoSuficiente.matches;
+  var destino = cabe ? $('doneCol') : $('marcaSlot');
+  if(rev.parentNode!==destino) destino.insertBefore(rev, cabe ? destino.querySelector('.again') : null);
+}
+if(anchoSuficiente.addEventListener) anchoSuficiente.addEventListener('change', ubicarRevelacion);
+ubicarRevelacion();
 $('home').onclick=function(){show('intro');};
 document.addEventListener('keydown',function(e){
   if(!$('test').classList.contains('on'))return;
