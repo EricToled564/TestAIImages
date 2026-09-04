@@ -46,15 +46,11 @@ td.mini{width:92px;padding-left:0}
 td.mini img{display:block;width:76px;height:76px;object-fit:cover;border-radius:2px;background:var(--surface)}
 .pos{font-family:var(--mono);font-size:12px;color:var(--label);width:38px}
 .pct{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1}
-.pct.bien{color:var(--bien)}
-.pct.mal{color:var(--mal)}
 .sub{font-family:var(--mono);font-size:11px;color:var(--label);margin-top:4px}
 .medida{min-width:170px}
 .riel{position:relative;height:8px;background:var(--surface);border:1px solid var(--line);
 border-radius:2px;overflow:hidden}
-.riel i{display:block;height:100%;background:var(--dim)}
-.riel i.bien{background:var(--bien)}
-.riel i.mal{background:var(--mal)}
+.riel i{display:block;height:100%}
 .riel u{position:absolute;top:-3px;bottom:-3px;left:50%;width:1px;background:var(--dim);opacity:.75}
 .pie{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--label)}
 
@@ -147,6 +143,18 @@ function get(key){
 
 var generadas=ITEMS.filter(function(x){return !x.real;});
 
+/* Escala continua: reconocimiento bajo = verde, alto = rojo. Sin escalones,
+   para que no haya una franja ambigua justo donde caen casi todos los datos.
+   El 50% —contestar al azar— queda en amarillo, y de ahí al rojo va curvado:
+   con un reparto lineal, un 79% todavía se veía naranja. Luminosidad 64% para
+   que cualquier tono del recorrido pase el mínimo de contraste sobre negro. */
+function tono(pct){
+  var p=Math.max(0,Math.min(100,pct)), h, s=62;
+  if(p<=50){ h=142-82*(p/50); }
+  else{ var t=(p-50)/50; h=60*(1-t)*(1-t); s=62+16*t; }
+  return 'hsl('+Math.round(h)+','+Math.round(s)+'%,64%)';
+}
+
 function cargar(){
   $('estado').hidden=false; $('estado').textContent='Leyendo contadores…';
   $('tabla').hidden=true; $('carga').hidden=false;
@@ -191,15 +199,16 @@ function pintar(runs, cuentas){
   var html='';
   filas.forEach(function(f,n){
     var pct=f.pct, resto=100-pct;
-    var clase = pct<50 ? 'bien' : pct>60 ? 'mal' : '';
+    var color=tono(pct);
     html+='<tr>'
       + '<td class="pos">'+(n+1)+'</td>'
       + '<td class="mini"><img src="'+f.it.src+'" alt=""></td>'
       + '<td><span class="mono">'+f.it.id+'</span></td>'
-      + '<td class="n"><div class="pct '+clase+'">'+pct.toFixed(1)+'%</div>'
+      + '<td class="n"><div class="pct" style="color:'+color+'">'+pct.toFixed(1)+'%</div>'
         + '<div class="sub">'+f.vistas.toLocaleString('es-MX')+' de '+runs.toLocaleString('es-MX')+'</div></td>'
       + '<td class="n"><div class="pct">'+resto.toFixed(1)+'%</div></td>'
-      + '<td class="medida"><div class="riel"><i class="'+clase+'" style="width:'+Math.min(100,pct).toFixed(1)+'%"></i><u></u></div></td>'
+      + '<td class="medida"><div class="riel"><i style="width:'+Math.min(100,pct).toFixed(1)
+        + '%;background:'+color+'"></i><u></u></div></td>'
       + '</tr>';
   });
   $('filas').innerHTML=html;
