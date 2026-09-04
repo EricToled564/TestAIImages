@@ -98,10 +98,15 @@ justify-content:center;padding:26px 0;overflow:hidden}
 /* En su propia pantalla el bloque no necesita separador ni margen superior. */
 #marcaSlot .reveal{margin:0;padding-top:0;border-top:0}
 .aviso a,.reveal a{color:var(--dim)}
-.rTitle{font-size:clamp(21px,min(3.6vw,5svh),46px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:min(14px,1.6svh) 0 min(18px,2svh);max-width:20ch}
-.rLead{font-size:clamp(15px,min(1.7vw,2.4svh),21px);color:var(--fg);margin:0 0 min(16px,1.8svh);max-width:52ch}
-.rLead b{font-weight:700}
-.rBody{font-size:clamp(13.5px,min(1.4vw,2svh),18px);line-height:1.55;color:var(--dim);margin:0;max-width:66ch}
+.rTitle{font-size:clamp(20px,min(3.1vw,4.3svh),40px);font-weight:800;letter-spacing:-.035em;line-height:1.06;margin:min(14px,1.6svh) 0 min(18px,2svh);max-width:20ch}
+.rBody{font-size:clamp(13.5px,min(1.4vw,2svh),18px);line-height:1.55;color:var(--dim);margin:0;max-width:64ch}
+/* La firma cierra el bloque como en un anuncio impreso: primero lo que pasó,
+   luego quién lo hizo. En versales pesa más que el titular aunque mida menos. */
+.firma{margin:min(26px,3svh) 0 0;padding-top:min(18px,2.2svh);border-top:1px solid var(--line)}
+.marca{display:block;font-size:clamp(22px,min(3vw,4.1svh),38px);font-weight:800;
+letter-spacing:.055em;text-transform:uppercase;line-height:1;color:var(--fg)}
+.marcaPie{display:block;font-family:var(--mono);font-size:clamp(10.5px,1.5svh,12.5px);
+letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin:min(10px,1.2svh) 0 0}
 .aviso{margin:min(22px,2.5svh) 0 0;color:var(--label);max-width:76ch;font-size:clamp(11.5px,1.6svh,14px)}
 .gstate .btn{padding:9px 16px;font-size:13px;margin-left:10px}
 /* Una sola línea de 0 a 100 con dos marcas: tu promedio arriba, el promedio
@@ -119,10 +124,6 @@ font-family:var(--mono);font-size:13px;letter-spacing:.06em;font-weight:600}
 .pin.all i{top:4px}
 .pin.all b{top:26px}
 .sticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--label)}
-.reveal{margin:52px 0 0;max-width:70ch;padding-top:26px;border-top:1px solid var(--line)}
-.reveal h3{font-size:clamp(20px,2.6vw,28px);font-weight:800;letter-spacing:-.025em;margin:0 0 16px}
-.reveal p{margin:0 0 14px;font-size:16px;line-height:1.65;color:var(--dim)}
-.reveal p b{color:var(--fg);font-weight:600}
 .again{display:flex;gap:12px;flex-wrap:wrap;margin:min(24px,3svh) 0 0}
 footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line)}
 footer a{color:var(--dim)}
@@ -187,8 +188,9 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 .facts{gap:38px;padding-top:20px;margin-bottom:min(32px,3.6svh)}
 .facts .v{font-size:15.5px}
 .fineprint{font-size:13.5px}
-.rTitle{font-size:clamp(34px,6svh,54px)}
-.rLead{font-size:clamp(19px,2.8svh,24px)}
+/* La marca pesa más que el titular: es lo último que debe quedar en la cabeza. */
+.rTitle{font-size:clamp(26px,4.4svh,40px);max-width:24ch}
+.marca{font-size:clamp(30px,5.3svh,50px)}
 .rBody{font-size:clamp(16px,2.2svh,19px)}
 .aviso{font-size:13px}}
 @media (max-height:760px){.strip{height:clamp(44px,7svh,90px);margin-bottom:min(18px,2svh)}
@@ -202,9 +204,9 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 .fineprint{font-size:11px;margin-top:12px}
 #done .btn,#marca .btn{padding:11px 15px;font-size:13.5px}
 .rBody{font-size:12.5px;line-height:1.45}.aviso{font-size:10.5px;margin-top:10px}
-#marca .again{margin-top:10px}.rTitle{margin-bottom:8px}.rLead{margin-bottom:8px}
+#marca .again{margin-top:10px}.rTitle{margin-bottom:8px}
 .rBody{font-size:11.5px;line-height:1.38}.again{margin-top:min(14px,1.8svh)}
-.rTitle{font-size:clamp(18px,4.6svh,28px)}.rLead{font-size:13px}
+.rTitle{font-size:clamp(18px,4.1svh,24px)}.marca{font-size:clamp(22px,5svh,30px)}
 #marca .btn{padding:10px 14px;font-size:13px}.aviso{font-size:10.5px}
 #marca>.wrap>.mono{display:none}
 #intro .strip{display:none}
@@ -286,11 +288,14 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   </div>
   <div class="dcol" id="doneCol">
   <div class="reveal" id="reveal">
-    <h2 class="rTitle">Estas imágenes las hicimos nosotros</h2>
-    <p class="rLead">Las veinte imágenes generadas que acabas de ver salieron de <b>Final Edge</b>.</p>
+    <!-- El titular es sobre lo que acaba de pasarle a quien juega, no sobre
+         nosotros: mirar treinta imágenes y no poder separarlas. La marca cierra,
+         no se anuncia. -->
+    <h2 class="rTitle">Veinte de esas imágenes nunca pasaron delante de una cámara.</h2>
     <!-- Cierra el círculo con la portada: ahí la objeción era «sin alma», aquí
          se responde de frente. Sin lista de atributos: se cuenta, no se enumera. -->
-    <p class="rBody">Ninguna salió de un prompt afortunado. En cada una hubo alguien eligiendo la luz, el gesto, el instante — y descartando una y otra vez hasta que la imagen por fin dijo algo. Porque el alma de una imagen nunca la puso la herramienta: la pone quien la dirige. Treinta años del lado del cliente nos enseñaron a reconocer ese momento en que una imagen deja de ser correcta y empieza a emocionar. Eso es lo que traemos a la IA.</p>
+    <p class="rBody">Ni el lugar, ni la persona, ni la luz de esa tarde: nada de eso ocurrió. Y aun así te dijeron algo. El alma de una imagen nunca la puso la herramienta — la pone quien la dirige. Treinta años del lado del cliente nos enseñaron a reconocerla antes de producirla.</p>
+    <p class="firma"><span class="marca">Final Edge</span><span class="marcaPie">Dirección de imagen con IA</span></p>
   </div>
   <div class="again">
     <button class="btn" id="verMas">Quién las hizo</button>
