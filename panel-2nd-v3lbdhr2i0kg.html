@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Primera ronda · ¿La hizo una IA?</title>
+<title>2nd Round · ¿La hizo una IA?</title>
 <!-- Página no enlazada desde ningún sitio y excluida de buscadores. -->
 <meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,16 +14,11 @@
 <body>
 <div class="wrap">
   <p class="mono">Panel interno · Final Edge</p>
-  <h1>Primera ronda — resultados finales</h1>
-  <p class="lede">Las 20 imágenes generadas que estuvieron en juego hasta el 6 de septiembre de 2026,
-  con el porcentaje de personas que señaló cada una como hecha con IA.</p>
+  <h1>2nd Round</h1>
+  <p class="lede">De las dieciocho imágenes generadas en juego, el porcentaje de personas que la
+  señaló como hecha con IA. Cuanto más abajo en la lista, más convence.</p>
 
-  <div class="cerrada">
-    <b>Ronda cerrada</b>
-    <span>Estas cifras ya no cambian: el juego pasó a la segunda ronda con otro banco de imágenes
-    y otros contadores.</span>
-  </div>
-  <p class="otra"><a href="panel-2nd-v3lbdhr2i0kg.html">Ver la segunda ronda, en curso →</a></p>
+  <p class="otra"><a href="panel-9009ly4u2c2h8y.html">← Ver la primera ronda, ya cerrada</a></p>
 
   <div class="resumen">
     <div><span class="k">Partidas medidas</span><span class="v" id="runs">—</span></div>
@@ -48,8 +43,8 @@
   </table>
 
   <div class="aviso">
-    <p><b>Cómo leerlo.</b> Cada partida mostraba las treinta imágenes, así que toda partida medida
-    expone cada imagen exactamente una vez. El porcentaje es «veces que la señalaron como IA»
+    <p><b>Cómo leerlo.</b> Cada partida muestra las treinta y cuatro imágenes, así que toda partida
+    medida expone cada imagen exactamente una vez. El porcentaje es «veces que la señalaron como IA»
     entre «partidas medidas».</p>
     <p>La marca del medio de cada barra es el <b>50 %</b>: lo que saldría si la gente contestara
     al azar. Una imagen por debajo del 50 % engaña más que una moneda al aire.</p>
@@ -59,10 +54,14 @@
   <p style="margin-top:26px"><button class="btn" id="recargar">Volver a leer</button></p>
 </div>
 
-<script src="items-r1.js"></script>
+<script src="items.js"></script>
 <script>
-/* Ronda cerrada: contadores e imágenes de la primera tanda, congelados. */
-var RONDA={ ns:'lahizounaia-v3-vrk10b', imagenes:ITEMS_R1, cerrada:true };
+/* Ronda en curso: contadores propios, para no mezclarse con la primera. */
+var RONDA={
+  ns:'lahizounaia-r2-t7m4qp',
+  imagenes:ITEMS.filter(function(x){return !x.real;}),
+  cerrada:false
+};
 </script>
 <script src="panel.js"></script>
 </body>

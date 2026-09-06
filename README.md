@@ -1,6 +1,6 @@
 # ¿La hizo una IA?
 
-Juego de percepción: 30 imágenes, una por una — ¿fotografía real o imagen generada por IA?
+Juego de percepción: 34 imágenes, una por una — ¿fotografía real o imagen generada por IA?
 Al terminar, el jugador recibe una nota de 0 a 100 y una comparación **anónima** contra el
 acumulado de todos los participantes (promedio global, percentil aproximado y distribución).
 
@@ -9,7 +9,10 @@ acumulado de todos los participantes (promedio global, percentil aproximado y di
 | Archivo | Qué es |
 |---|---|
 | `index.html` | Toda la app (UI + lógica). Sitio 100 % estático, sin build. |
-| `items.js` | Banco de 30 imágenes embebidas en base64 (`{src, real}`). |
+| `items.js` | Banco de 34 imágenes embebidas en base64 (`{id, src, real}`). |
+| `items-r1.js` | Miniaturas e ids de las 20 imágenes de la ronda 1, congelados. |
+| `panel.css` · `panel.js` | Código común de los dos paneles. |
+| `og.png` | Imagen de vista previa para LinkedIn (1200×630). |
 | `creditos.html` | Créditos de las fotografías (⚠️ atribuciones individuales pendientes). |
 | `vercel.json` | Config mínima para Vercel (estático, sin framework). |
 
@@ -21,15 +24,23 @@ La nota, un comentario, los aciertos y tres números con una línea. Nada más.
 
 | Nota | Mensaje |
 |---|---|
-| **menos de 66** | «Parece que la tecnología aplicada por Final Edge ha llegado a un punto en el que te es difícil identificar las imágenes hechas con IA de las imágenes fotográficas reales.» |
-| **66 o más** | «Felicidades. Al parecer aún tenemos que esforzarnos más para crear imágenes que logren confundirse con la realidad.» |
+| **menos de 67** | «Parece que la tecnología aplicada por Final Edge ha llegado a un punto en el que te es difícil identificar las imágenes hechas con IA de las imágenes fotográficas reales.» |
+| **67 o más** | «Felicidades. Al parecer aún tenemos que esforzarnos más para crear imágenes que logren confundirse con la realidad.» |
 
-El corte no es arbitrario. Con 10 fotos reales y 20 imágenes de IA, y bajo la hipótesis de
-que la persona no distingue (sus respuestas son independientes de la verdad, con cualquier
-estrategia — incluso contestar siempre lo mismo), la nota tiene media 50. Alcanzar **66**
-por puro azar tiene una probabilidad del **4,65 %** con la estrategia más favorable al azar,
-es decir, el corte del 5 % de una cola para este diseño. Constante `UMBRAL` en `index.html`;
-con α = 0,01 el corte sería 73.
+El corte no es arbitrario. Con 16 fotos reales y 18 imágenes de IA, y bajo la hipótesis de
+que la persona no distingue (sus respuestas son independientes de la verdad), la nota tiene
+media 50. Alcanzar **67** por puro azar tiene una probabilidad del **4,55 %** con la
+estrategia más favorable al azar. Constante `UMBRAL` en `index.html`; con α = 0,01 sería 73.
+
+El peor caso se calcula así: quien no distingue elige un número fijo *k* de imágenes para
+señalar como IA, y cuántas de ellas lo son de verdad sigue una hipergeométrica. Se toma el
+*k* que más probabilidad da de superar el corte.
+
+> **Corrección.** La primera ronda usó 66 documentado como «4,65 %». Esa cifra salía de
+> modelar que la persona contesta cada imagen a cara o cruz con probabilidad fija, que es una
+> *mezcla* del caso anterior y por tanto nunca puede ser el peor caso. El peor caso real de 66
+> con 10/20 era **7,71 %** (señalando IA en 16 de las 30), no 4,65 %: el corte era más laxo de
+> lo que declaraba. Con el mismo criterio, 10/20 habría necesitado 69.
 
 ### Los tres números
 
@@ -38,6 +49,22 @@ con α = 0,01 el corte sería 73.
 | **Tu promedio** | media de todas tus partidas | `localStorage` de tu navegador |
 | **Tus partidas** | cuántas has terminado | `localStorage` de tu navegador |
 | **Promedio global** | media de todas las partidas de todos | contadores públicos |
+
+## Dos rondas
+
+| | Ronda 1 (cerrada) | Ronda 2 (en curso) |
+|---|---|---|
+| Banco | 10 fotos + 20 de IA | 16 fotos + 18 de IA |
+| Umbral | 66 | 67 |
+| Namespace | `lahizounaia-v3-vrk10b` | `lahizounaia-r2-t7m4qp` |
+| Panel | `panel-9009ly4u2c2h8y.html` | `panel-2nd-v3lbdhr2i0kg.html` |
+
+Cada ronda tiene **namespace propio**: cambiar el banco cambia la dificultad, así que mezclar
+promedios entre rondas no significaría nada. Los contadores de la ronda 1 quedan congelados
+porque el juego ya no escribe en ellos.
+
+`items-r1.js` guarda miniaturas e ids de las 20 imágenes de la ronda 1 (135 KB) para que su
+panel siga funcionando sin arrastrar el banco completo.
 
 La línea de 0 a 100 marca esos dos promedios: el tuyo arriba, el global abajo.
 
@@ -57,7 +84,7 @@ La línea de 0 a 100 marca esos dos promedios: el tuyo arriba, el global abajo.
 
 ## Panel por imagen
 
-`panel-9009ly4u2c2h8y.html` lista las 20 imágenes generadas con el porcentaje de gente que
+Cada panel lista las imágenes generadas de su ronda con el porcentaje de gente que
 señaló cada una como hecha con IA, de la más convincente a la más delatada.
 
 - Cada imagen lleva un **id de contenido** (SHA-256 de sus bytes, 10 hex) guardado en `items.js`.
@@ -67,11 +94,11 @@ señaló cada una como hecha con IA, de la más convincente a la más delatada.
   como IA, más `runs`.
 - El divisor es **`runs`**, no el total histórico de partidas: cuando se añadió este registro ya
   había partidas contadas sin datos por imagen, y usarlas daría porcentajes falsos. Como cada
-  partida muestra las 30 imágenes, toda partida contada expone cada imagen exactamente una vez.
+  partida muestra las 34 imágenes, toda partida contada expone cada imagen exactamente una vez.
 
 ### El límite de peticiones obliga a hacer cola
 
-Terminar una partida necesita hasta 41 peticiones (20 para leer el promedio global, 21 para
+Terminar una partida necesita hasta 39 peticiones (20 para leer el promedio global, 19 para
 registrar la partida imagen por imagen) y el servicio corta a 30 cada 10 s por IP. Ambas páginas
 usan una **ventana deslizante** de 25: se cuentan los envíos de los últimos 10 s y no se pasa de
 ahí. Un cubo de fichas no sirve — arrancando lleno y reponiéndose deja pasar el doble del cupo
@@ -106,6 +133,6 @@ Nota: si producción muestra `404 NOT_FOUND`, es que `main` aún no contiene la 
 
 Después del primer deploy con la app:
 
-- [ ] Añadir en `index.html` la meta `og:image` con URL absoluta del dominio final
-      (LinkedIn la exige para mostrar imagen en el post).
-- [ ] Completar las atribuciones en `creditos.html` antes de difundir.
+- [x] Meta `og:image` con URL absoluta (hecho: `og.png`).
+- [ ] Completar las atribuciones individuales en `creditos.html` antes de difundir.
+- [ ] Confirmar los derechos de las 6 fotografías aportadas por Final Edge en la ronda 2.
