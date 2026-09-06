@@ -1,0 +1,66 @@
+/* Estilos compartidos por los paneles de las dos rondas. */
+:root{--bg:#08090A;--surface:#121316;--line:#26282D;--fg:#FAFAF9;--dim:#8B909A;--label:#868C96;
+--sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+--mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.5;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 24px 80px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+h1{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin:10px 0 14px}
+.lede{color:var(--dim);margin:0 0 22px;max-width:70ch}
+
+/* Cinta de la ronda cerrada: deja claro de un vistazo que no son datos vivos. */
+.cerrada{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin:0 0 26px;padding:12px 16px;
+border:1px solid var(--line);border-left:2px solid var(--dim);border-radius:3px;background:var(--surface)}
+.cerrada b{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg)}
+.cerrada span{color:var(--label);font-size:13.5px}
+.otra{margin:0 0 26px}
+.otra a{color:var(--dim);font-size:13.5px}
+.otra a:hover{color:var(--fg)}
+
+.resumen{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1px;
+background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;margin:0 0 14px}
+.resumen div{background:var(--bg);padding:14px 16px}
+.resumen .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--label);display:block;margin-bottom:7px}
+.resumen .v{font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:1}
+
+.nota{border-left:2px solid var(--line);padding:2px 0 2px 14px;margin:0 0 30px;color:var(--label);
+font-size:14px;max-width:78ch}
+.nota b{color:var(--fg);font-weight:600}
+
+.barra-carga{height:2px;background:var(--line);border-radius:2px;overflow:hidden;margin:20px 0}
+.barra-carga i{display:block;height:100%;width:0;background:var(--fg);transition:width .25s}
+
+table{width:100%;border-collapse:collapse}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--label);
+text-align:left;font-weight:500;padding:0 12px 10px;border-bottom:1px solid var(--line)}
+th.n,td.n{text-align:right;white-space:nowrap}
+td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:hover td{background:var(--surface)}
+td.mini{width:92px;padding-left:0}
+td.mini img{display:block;width:76px;height:76px;object-fit:cover;border-radius:2px;background:var(--surface)}
+.pos{font-family:var(--mono);font-size:12px;color:var(--label);width:38px}
+.pct{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.sub{font-family:var(--mono);font-size:11px;color:var(--label);margin-top:4px}
+.medida{min-width:170px}
+.riel{position:relative;height:8px;background:var(--surface);border:1px solid var(--line);
+border-radius:2px;overflow:hidden}
+.riel i{display:block;height:100%}
+.riel u{position:absolute;top:-3px;bottom:-3px;left:50%;width:1px;background:var(--dim);opacity:.75}
+
+.aviso{margin:34px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:3px;
+color:var(--label);font-size:13.5px;max-width:80ch}
+.aviso b{color:var(--fg);font-weight:600}
+.aviso p{margin:0 0 10px}
+.aviso p:last-child{margin:0}
+.estado{color:var(--dim);padding:18px 0}
+.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--dim);
+cursor:pointer;font-family:var(--sans);font-size:13px;padding:9px 15px;border-radius:2px}
+.btn:hover{color:var(--fg);border-color:var(--dim)}
+@media (max-width:720px){
+  td.mini{width:64px} td.mini img{width:56px;height:56px}
+  .medida,th.medida{display:none}
+  .wrap{padding:28px 16px 60px}
+}

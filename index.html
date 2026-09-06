@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>¿La hizo una IA?</title>
-<meta name="description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 30 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
+<meta name="description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 34 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="¿La hizo una IA?">
-<meta property="og:description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 30 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
+<meta property="og:description" content="Dicen que una imagen hecha con IA se reconoce a simple vista. 34 imágenes, una por una: ¿foto real o generada por IA? Ponte a prueba.">
 <meta property="og:locale" content="es_MX">
 <meta name="twitter:card" content="summary_large_image">
 <!-- LinkedIn exige URL absoluta y no sigue redirecciones al rastrear la vista
@@ -18,7 +18,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Treinta imágenes, una por una: ¿fotografía real o generada con IA?">
+<meta property="og:image:alt" content="Treinta y cuatro imágenes, una por una: ¿fotografía real o generada con IA?">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
@@ -236,12 +236,12 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
 <section class="screen on" id="intro"><div class="wrap">
   <p class="mono">Prueba de percepción</p>
   <h1>Dicen que una imagen hecha con IA <span>se reconoce a simple vista.</span></h1>
-  <p class="lede">Fría. Artificial. Sin alma. Es la objeción de siempre, y suena razonable — hasta que la pones a prueba. Treinta imágenes, una por una, sin nada al lado con qué compararlas. <b>Tú decides cuál es cuál.</b></p>
+  <p class="lede">Fría. Artificial. Sin alma. Es la objeción de siempre, y suena razonable — hasta que la pones a prueba. Treinta y cuatro imágenes, una por una, sin nada al lado con qué compararlas. <b>Tú decides cuál es cuál.</b></p>
   <div class="strip" id="strip"></div>
   <div class="facts">
     <div><span class="k">Imágenes</span><span class="v">30</span></div>
     <div><span class="k">Resultado</span><span class="v">Tu nota vs. todas las partidas jugadas</span></div>
-    <div><span class="k">Duración</span><span class="v">Unos 4 minutos</span></div>
+    <div><span class="k">Duración</span><span class="v">Unos 5 minutos</span></div>
   </div>
   <div><button class="btn" id="start">Empezar</button></div>
   <p class="fineprint">Anónimo y sin registro: al terminar solo se suma tu nota a un contador global.</p>
@@ -296,9 +296,9 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
   <div class="dcol" id="doneCol">
   <div class="reveal" id="reveal">
     <!-- El titular es sobre lo que acaba de pasarle a quien juega, no sobre
-         nosotros: mirar treinta imágenes y no poder separarlas. La marca cierra,
+         nosotros: mirar treinta y cuatro imágenes y no poder separarlas. La marca cierra,
          no se anuncia. -->
-    <h2 class="rTitle">Veinte de esas imágenes nunca pasaron delante de una cámara.</h2>
+    <h2 class="rTitle">Dieciocho de esas imágenes nunca pasaron delante de una cámara.</h2>
     <!-- Cierra el círculo con la portada: ahí la objeción era «sin alma», aquí
          se responde de frente. Sin lista de atributos: se cuenta, no se enumera. -->
     <p class="rBody">Ni el lugar, ni la persona, ni la luz de esa tarde: nada de eso ocurrió. Y aun así te dijeron algo. El alma de una imagen nunca la puso la herramienta — la pone quien la dirige. Treinta años del lado del cliente nos enseñaron a reconocerla antes de producirla.</p>
@@ -318,7 +318,7 @@ padding:16px 18px calc(18px + env(safe-area-inset-bottom,0px))}
     <button class="btn" id="retry2">Jugar otra vez</button>
     <button class="btn ghost" id="home">Volver al inicio</button>
   </div>
-  <p class="fine aviso">Juego anónimo, sin datos personales. Las 10 fotografías reales son de Wikimedia Commons (<a href="creditos.html">créditos</a>); las 20 generadas con IA, obra de Final Edge.</p>
+  <p class="fine aviso">Juego anónimo, sin datos personales. De las 16 fotografías reales, 10 son de Wikimedia Commons (<a href="creditos.html">créditos</a>) y 6 las aportó Final Edge; las 18 generadas con IA son obra de Final Edge.</p>
 </div></section>
 
 <script src="items.js"></script>
@@ -327,7 +327,7 @@ var N = ITEMS.length, deck=[], idx=0, hits=0, okReal=0, okAi=0, saidAi=0;
 /* Ids de las imágenes generadas que esta persona señaló como IA. */
 var senaladas=[];
 /* Nota a partir de la cual se puede afirmar estadísticamente que sí distingue. */
-var UMBRAL = 66;
+var UMBRAL = 67;
 var N_REAL = ITEMS.filter(function(x){return x.real;}).length;
 var N_AI = N - N_REAL;
 function $(id){return document.getElementById(id);}
@@ -385,7 +385,7 @@ function finish(){
    nada identificable. Tuyo: se guarda en tu navegador, no sale de ahí.
    Para probar sin tocar los datos reales: añadir ?ns=loquesea a la URL. */
 var AGG_BASE='https://abacus.jasoncameron.dev';
-var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-v3-vrk10b';}catch(e){return 'lahizounaia-v3-vrk10b';}})();
+var AGG_NS=(function(){try{return new URLSearchParams(location.search).get('ns')||'lahizounaia-r2-t7m4qp';}catch(e){return 'lahizounaia-r2-t7m4qp';}})();
 var MINE_KEY='aia_mine_'+AGG_NS;
 var lastScore=null, lastCounted=false, mineMem=null;
 
@@ -455,7 +455,7 @@ function hitCount(key,urgente){
 /* Panel privado: por cada imagen generada, cuántas veces la señalaron como IA.
    El divisor es "runs" —partidas contadas desde que existe este registro— y no
    el total histórico, porque ese ya traía partidas de antes sin datos por
-   imagen y daría porcentajes falsos. Cada partida muestra las 30 imágenes,
+   imagen y daría porcentajes falsos. Cada partida muestra las 34 imágenes,
    así que toda partida contada expone cada imagen exactamente una vez. */
 function imgKey(id){return 'i'+id;}
 var RUNS_KEY='runs', registrado=false;
