@@ -1,6 +1,6 @@
 # ¿La hizo una IA?
 
-Juego de percepción: 47 imágenes, una por una — ¿fotografía real o imagen generada por IA?
+Juego de percepción: 46 imágenes, una por una — ¿fotografía real o imagen generada por IA?
 Al terminar, el jugador recibe una nota de 0 a 100 y una comparación **anónima** contra el
 acumulado de todos los participantes (promedio global, percentil aproximado y distribución).
 
@@ -9,7 +9,7 @@ acumulado de todos los participantes (promedio global, percentil aproximado y di
 | Archivo | Qué es |
 |---|---|
 | `index.html` | Toda la app (UI + lógica). Sitio 100 % estático, sin build. |
-| `items.js` | Banco de 47 imágenes embebidas en base64 (`{id, src, real}`). |
+| `items.js` | Banco de 46 imágenes embebidas en base64 (`{id, src, real}`). |
 | `items-r1.js` | Miniaturas e ids de las 20 imágenes de la ronda 1, congelados. |
 | `panel.css` · `panel.js` | Código común de los dos paneles. |
 | `og.png` | Imagen de vista previa para LinkedIn (1200×630). |
@@ -24,13 +24,13 @@ La nota, un comentario, los aciertos y tres números con una línea. Nada más.
 
 | Nota | Mensaje |
 |---|---|
-| **menos de 65** | «Parece que la tecnología aplicada por Final Edge ha llegado a un punto en el que te es difícil identificar las imágenes hechas con IA de las imágenes fotográficas reales.» |
-| **65 o más** | «Felicidades. Al parecer aún tenemos que esforzarnos más para crear imágenes que logren confundirse con la realidad.» |
+| **menos de 64** | «Parece que la tecnología aplicada por Final Edge ha llegado a un punto en el que te es difícil identificar las imágenes hechas con IA de las imágenes fotográficas reales.» |
+| **64 o más** | «Felicidades. Al parecer aún tenemos que esforzarnos más para crear imágenes que logren confundirse con la realidad.» |
 
-El corte no es arbitrario. Con 23 fotos reales y 24 imágenes de IA, y bajo la hipótesis de
+El corte no es arbitrario. Con 23 fotos reales y 23 imágenes de IA, y bajo la hipótesis de
 que la persona no distingue (sus respuestas son independientes de la verdad), la nota tiene
-media 50. Alcanzar **65** por puro azar tiene una probabilidad del **2,87 %** con la
-estrategia más favorable al azar. Constante `UMBRAL` en `index.html`; con α = 0,01 sería 69.
+media 50. Alcanzar **64** por puro azar tiene una probabilidad del **3,79 %** con la
+estrategia más favorable al azar. Constante `UMBRAL` en `index.html`; con α = 0,01 sería 68.
 
 El peor caso se calcula así: quien no distingue elige un número fijo *k* de imágenes para
 señalar como IA, y cuántas de ellas lo son de verdad sigue una hipergeométrica. Se toma el
@@ -54,8 +54,8 @@ señalar como IA, y cuántas de ellas lo son de verdad sigue una hipergeométric
 
 | | Ronda 1 (cerrada) | Ronda 2 (en curso) |
 |---|---|---|
-| Banco | 10 fotos + 20 de IA | 23 fotos + 24 de IA |
-| Umbral | 66 | 65 |
+| Banco | 10 fotos + 20 de IA | 23 fotos + 23 de IA |
+| Umbral | 66 | 64 |
 | Namespace | `lahizounaia-v3-vrk10b` | `lahizounaia-r2-t7m4qp` |
 | Panel | `panel-9009ly4u2c2h8y.html` | `panel-2nd-v3lbdhr2i0kg.html` |
 
@@ -94,7 +94,7 @@ señaló cada una como hecha con IA, de la más convincente a la más delatada.
   como IA, más `runs`.
 - El divisor es **`runs`**, no el total histórico de partidas: cuando se añadió este registro ya
   había partidas contadas sin datos por imagen, y usarlas daría porcentajes falsos. Como cada
-  partida muestra las 47 imágenes, toda partida contada expone cada imagen exactamente una vez.
+  partida muestra las 46 imágenes, toda partida contada expone cada imagen exactamente una vez.
 
 ### El límite de peticiones obliga a hacer cola
 
